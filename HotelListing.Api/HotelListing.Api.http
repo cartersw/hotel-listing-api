@@ -24,7 +24,7 @@ DELETE {{HotelListing.Api_HostAddress}}/api/hotels/{{id}}
 
 ###
 
-@id=1
+@id=2
 GET {{HotelListing.Api_HostAddress}}/api/hotels/{{id}}
 
 ###
@@ -37,6 +37,40 @@ Content-Type: application/json
   "name": "Graddnd Plaza",
   "address": "12453 Main Street St",
   "rating": 2.834
+}
+
+###
+
+GET {{HotelListing.Api_HostAddress}}/api/countries
+
+###
+
+POST {{HotelListing.Api_HostAddress}}/api/countries
+Content-Type: application/json
+
+{
+  "name": "Test country 3",
+  "shortName": "TC3"
+}
+
+###
+@countryid=1
+DELETE {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
+
+###
+
+
+GET {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
+
+###
+@countryid=2
+PUT {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
+Content-Type: application/json
+
+{
+  "countryId": 2,
+  "name": "Countryia",
+  "shortName": "CRI"
 }
 
 ###
