@@ -15,16 +15,21 @@ Content-Type: application/json
 }
 
 ###
-@countryid=1
+
 DELETE {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
 
 ###
 
-
+@countryid = 3
 GET {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
 
 ###
-@countryid=2
+
+
+GET {{HotelListing.Api_HostAddress}}/api/countries/3
+
+###
+
 PUT {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
 Content-Type: application/json
 
@@ -56,7 +61,7 @@ Content-Type: application/json
 DELETE {{HotelListing.Api_HostAddress}}/api/hotels/{{id}}
 
 ###
-
+@id=3
 GET {{HotelListing.Api_HostAddress}}/api/hotels/{{id}}
 
 ###

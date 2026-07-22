@@ -16,14 +16,19 @@ public class HotelsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Hotel>>> GetHotel()
     {
-        return await _context.Hotels.ToListAsync();
+
+        return await _context.Hotels
+            //.Include(h => h.Country)
+            .ToListAsync();
     }
 
     // GET: api/Hotel/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Hotel>> GetHotel(int id)
     {
-        var hotel = await _context.Hotels.FindAsync(id);
+        var hotel = await _context.Hotels
+            .Include(h => h.Country)
+            .FirstOrDefaultAsync(h => h.Id == id);
 
         if (hotel == null)
         {

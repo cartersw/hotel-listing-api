@@ -19,7 +19,9 @@ public class CountriesController(HotelListingDbContext context) : ControllerBase
     [HttpGet("{countryid}")]
     public async Task<ActionResult<Country>> GetCountry(int countryid)
     {
-        var country = await context.Countries.FindAsync(countryid);
+        var country = await context.Countries
+            .Include(c => c.Hotels)
+            .FirstOrDefaultAsync(c => c.CountryId == countryid);
 
         if (country == null)
         {
