@@ -10,8 +10,8 @@ POST {{HotelListing.Api_HostAddress}}/api/countries
 Content-Type: application/json
 
 {
-  "name": "Test country 3",
-  "shortName": "TC3"
+  "name": "Test country 4",
+  "shortName": "TC4"
 }
 
 ###
@@ -49,9 +49,9 @@ POST {{HotelListing.Api_HostAddress}}/api/hotels
 Content-Type: application/json
 
 {
-  "Name": "Test Hotel 55",
-  "Address": "Test Address 5",
-  "Rating": 4.5,
+  "Name": "Test Hotel 1555",
+  "Address": "Test",
+  "Rating": 5.1,
   "CountryId": 2
 }
 
