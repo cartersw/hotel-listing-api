@@ -23,7 +23,7 @@ public class HotelsController : ControllerBase
                 h.Name,
                 h.Address,
                 h.Rating,
-                h.CountryId
+                h.Country!.Name
             )).ToListAsync();
 
         return Ok(hotels);
@@ -40,7 +40,7 @@ public class HotelsController : ControllerBase
             h.Name,
             h.Address,
             h.Rating,
-            h.Country!.Name
+            h.CountryId
         )).FirstOrDefaultAsync();
 
         if (hotel == null)

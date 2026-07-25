@@ -20,7 +20,7 @@ DELETE {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
 
 ###
 
-@countryid = 3
+@countryid = 2
 GET {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
 
 ###

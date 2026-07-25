@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelListing.Api.Data;
+using HotelListing.Api.DTOs.Country;
+using HotelListing.Api.DTOs.Hotel;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -9,19 +11,35 @@ public class CountriesController(HotelListingDbContext context) : ControllerBase
 
     // GET: api/Country
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Country>>> GetCountry()
+    public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountry()
     {
-        var countries = await context.Countries.ToListAsync();
+        var countries = await context.Countries.Select(c => new GetCountryDto(
+            c.CountryId,
+            c.Name,
+            c.ShortName
+        )).ToListAsync();
+
         return countries;
     }
 
     // GET: api/Country/5
     [HttpGet("{countryid}")]
-    public async Task<ActionResult<Country>> GetCountry(int countryid)
+    public async Task<ActionResult<GetCountryDetailsDto>> GetCountry(int countryid)
     {
         var country = await context.Countries
-            .Include(c => c.Hotels)
-            .FirstOrDefaultAsync(c => c.CountryId == countryid);
+            .Where(c => c.CountryId == countryid)
+            .Select(c => new GetCountryDetailsDto(
+            c.CountryId,
+            c.Name,
+            c.ShortName,
+            c.Hotels.Select(h => new GetHotelDto(
+                h.Id,
+                h.Name,
+                h.Address,
+                h.Rating,
+                h.Country!.Name
+                )).ToList()
+            )).FirstOrDefaultAsync();
 
         if (country == null)
         {

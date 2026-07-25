@@ -5,8 +5,9 @@
         string Name,
         string Address,
         double Rating,
-        string Country
+        int CountryId
     );
+    
 
 }
 
