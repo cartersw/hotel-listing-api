@@ -54,12 +54,24 @@ public class HotelsController : ControllerBase
     // PUT: api/Hotel/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutHotel(int? id, Hotel hotel)
+    public async Task<IActionResult> PutHotel(int? id, UpdateHotelDto hotelDto)
     {
-        if (id != hotel.Id)
+        if (id != hotelDto.Id)
         {
             return BadRequest();
         }
+
+        var hotel = await _context.Hotels.FindAsync(id);
+
+        if(hotel == null)
+        {
+            return NotFound();
+        }
+
+        hotel.Name = hotelDto.Name;
+        hotel.Address = hotelDto.Address;
+        hotel.Rating = hotelDto.Rating;
+        hotel.CountryId = hotelDto.CountryId;
 
         _context.Entry(hotel).State = EntityState.Modified;
 
@@ -85,8 +97,17 @@ public class HotelsController : ControllerBase
     // POST: api/Hotel
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
+    public async Task<ActionResult<Hotel>> PostHotel(CreateHotelDto hotelDto)
     {
+
+        var hotel = new Hotel
+        {
+            Name = hotelDto.Name,
+            Address = hotelDto.Address,
+            Rating = hotelDto.Rating,
+            CountryId = hotelDto.CountryId
+        };
+
         _context.Hotels.Add(hotel);
         await _context.SaveChangesAsync();
 
