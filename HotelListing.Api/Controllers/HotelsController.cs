@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelListing.Api.Data;
+using HotelListing.Api.DTOs.Hotel;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -14,21 +15,33 @@ public class HotelsController : ControllerBase
 
     // GET: api/Hotel
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Hotel>>> GetHotel()
+    public async Task<ActionResult<IEnumerable<GetHotelDto>>> GetHotels()
     {
+        var hotels = await _context.Hotels
+            .Select(h => new GetHotelDto(
+                h.Id,
+                h.Name,
+                h.Address,
+                h.Rating,
+                h.CountryId
+            )).ToListAsync();
 
-        return await _context.Hotels
-            //.Include(h => h.Country)
-            .ToListAsync();
+        return Ok(hotels);
+
     }
 
     // GET: api/Hotel/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Hotel>> GetHotel(int id)
+    public async Task<ActionResult<GetHotelDetailsDto>> GetHotel(int id)
     {
-        var hotel = await _context.Hotels
-            .Include(h => h.Country)
-            .FirstOrDefaultAsync(h => h.Id == id);
+        var hotel = await _context.Hotels.Where(h => h.Id == id)
+            .Select(h => new GetHotelDetailsDto(
+            h.Id,
+            h.Name,
+            h.Address,
+            h.Rating,
+            h.Country!.Name
+        )).FirstOrDefaultAsync();
 
         if (hotel == null)
         {

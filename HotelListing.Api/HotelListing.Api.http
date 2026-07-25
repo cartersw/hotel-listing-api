@@ -66,7 +66,6 @@ GET {{HotelListing.Api_HostAddress}}/api/hotels/{{id}}
 
 ###
 
-@id=1
 PUT {{HotelListing.Api_HostAddress}}/api/hotels/{{id}}
 Content-Type: application/json
 
