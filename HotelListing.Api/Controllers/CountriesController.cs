@@ -52,12 +52,22 @@ public class CountriesController(HotelListingDbContext context) : ControllerBase
     // PUT: api/Country/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{countryid}")]
-    public async Task<IActionResult> PutCountry(int? countryid, Country country)
+    public async Task<IActionResult> PutCountry(int? countryid, UpdateCountryDto countryDto)
     {
-        if (countryid != country.CountryId)
+        if (countryid != countryDto.CountryId)
         {
             return BadRequest();
         }
+
+        var country = await context.Countries.FindAsync(countryid);
+
+        if(country == null)
+        {
+            return NotFound();
+        }
+
+        country.Name = countryDto.Name;
+        country.ShortName = countryDto.ShortName;
 
         context.Entry(country).State = EntityState.Modified;
 
@@ -83,8 +93,14 @@ public class CountriesController(HotelListingDbContext context) : ControllerBase
     // POST: api/Country
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<Country>> PostCountry(Country country)
+    public async Task<ActionResult<Country>> PostCountry(CreateCountryDto countryDto)
     {
+        var country = new Country
+        {
+            Name = countryDto.Name,
+            ShortName = countryDto.ShortName
+        };
+    
         context.Countries.Add(country);
         await context.SaveChangesAsync();
 

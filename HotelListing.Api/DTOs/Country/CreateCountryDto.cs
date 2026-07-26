@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 namespace HotelListing.Api.DTOs.Country
 {
-    public class CreateCountry
+    public class CreateCountryDto
     {
         [Required]
         [MaxLength(50)]
