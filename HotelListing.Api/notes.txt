@@ -1,0 +1,4 @@
+AddTransient - created at time of request, terminated instantly
+AddScoped - created at time of request, disposed at the end of request
+AddSingleton - created at time of request, disposed at the end of application
+

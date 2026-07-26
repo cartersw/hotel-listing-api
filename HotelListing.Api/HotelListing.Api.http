@@ -10,8 +10,8 @@ POST {{HotelListing.Api_HostAddress}}/api/countries
 Content-Type: application/json
 
 {
-  "name": "Test country with dto",
-  "shortName": "dtoc"
+  "name": "Test country with dto and service layer 2",
+  "shortName": "s2"
 }
 
 ###
@@ -19,14 +19,13 @@ Content-Type: application/json
 DELETE {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
 
 ###
-
-@countryid = 4
+@countryid = 5
 GET {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
 
 ###
 
 
-GET {{HotelListing.Api_HostAddress}}/api/countries/3
+GET {{HotelListing.Api_HostAddress}}/api/countries/5
 
 ###
 
@@ -34,8 +33,8 @@ PUT {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
 Content-Type: application/json
 
 {
-  "countryId": 4,
-  "name": "I edited this country",
+  "countryId": 5,
+  "name": "I edited this country with a service layer",
   "shortName": "ec"
 }
 
@@ -49,10 +48,10 @@ POST {{HotelListing.Api_HostAddress}}/api/hotels
 Content-Type: application/json
 
 {
-  "Name": "Dto Test Hotel",
+  "Name": "Another test hotel",
   "Address": "Test",
   "Rating": 4.9,
-  "CountryId": 2
+  "CountryId": 5
 }
 
 ###

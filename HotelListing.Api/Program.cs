@@ -1,5 +1,7 @@
 using HotelListing.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using HotelListing.Api.Contracts;
+using HotelListing.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("HotelListingDbConnectionString");
 
 builder.Services.AddDbContext<HotelListingDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<ICountriesService, CountriesService>();
 
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
