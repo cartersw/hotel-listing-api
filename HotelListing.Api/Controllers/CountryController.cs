@@ -8,14 +8,14 @@ using HotelListing.Api.Services;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CountriesController(ICountriesService countriesService) : ControllerBase
+public class CountryController(ICountryService countryService) : ControllerBase
 {
 
     // GET: api/Country
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountry()
     {
-        var resultDto = await countriesService.GetCountriesAsync();
+        var resultDto = await countryService.GetCountriesAsync();
 
         return Ok(resultDto);
     }
@@ -24,7 +24,7 @@ public class CountriesController(ICountriesService countriesService) : Controlle
     [HttpGet("{countryid}")]
     public async Task<ActionResult<GetCountryDetailsDto>> GetCountry(int countryId)
     {
-        var resultDto = await countriesService.GetCountryAsync(countryId);
+        var resultDto = await countryService.GetCountryAsync(countryId);
 
         if (resultDto == null)
         {
@@ -44,7 +44,7 @@ public class CountriesController(ICountriesService countriesService) : Controlle
             return BadRequest();
         }
 
-        await countriesService.UpdateCountryAsync(countryId, updateDto);
+        await countryService.UpdateCountryAsync(countryId, updateDto);
 
         return NoContent();
     }
@@ -54,7 +54,7 @@ public class CountriesController(ICountriesService countriesService) : Controlle
     [HttpPost]
     public async Task<ActionResult<GetCountryDetailsDto>> PostCountry(CreateCountryDto createDto)
     {
-        var resultDto = await countriesService.CreateCountryAsync(createDto);
+        var resultDto = await countryService.CreateCountryAsync(createDto);
 
         return CreatedAtAction(nameof(GetCountry), new { countryId = resultDto.CountryId }, resultDto); 
     }
@@ -64,7 +64,7 @@ public class CountriesController(ICountriesService countriesService) : Controlle
     public async Task<IActionResult> DeleteCountry(int? countryId)
     {
 
-        await countriesService.DeleteCountryAsync(countryId);
+        await countryService.DeleteCountryAsync(countryId);
 
         return NoContent();
     }

@@ -10,7 +10,7 @@ var connectionString = builder.Configuration.GetConnectionString("HotelListingDb
 
 builder.Services.AddDbContext<HotelListingDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<ICountriesService, CountriesService>();
+builder.Services.AddScoped<ICountryService, CountryService>();
 
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {

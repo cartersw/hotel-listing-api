@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Metrics;
 namespace HotelListing.Api.Services
 {
-    public class CountriesService(HotelListingDbContext context) : ICountriesService
+    public class CountryService(HotelListingDbContext context) : ICountryService
     {
         public async Task<IEnumerable<GetCountryDto>> GetCountriesAsync()
         {

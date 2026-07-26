@@ -2,70 +2,63 @@
 
 
 
-GET {{HotelListing.Api_HostAddress}}/api/countries
+
+GET {{HotelListing.Api_HostAddress}}/api/country
 
 ###
 
-POST {{HotelListing.Api_HostAddress}}/api/countries
+POST {{HotelListing.Api_HostAddress}}/api/country
 Content-Type: application/json
 
 {
-  "name": "Test country with dto and service layer 2",
-  "shortName": "s2"
+  "name": "Test country with dto and service layer 3",
+  "shortName": "s3"
 }
 
 ###
 
-DELETE {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
-
-###
-@countryid = 5
-GET {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
+DELETE {{HotelListing.Api_HostAddress}}/api/country/{{countryId}}
 
 ###
 
-
-GET {{HotelListing.Api_HostAddress}}/api/countries/5
+@countryId=6
+GET {{HotelListing.Api_HostAddress}}/api/country/{{countryId}}
 
 ###
 
-PUT {{HotelListing.Api_HostAddress}}/api/countries/{{countryid}}
+PUT {{HotelListing.Api_HostAddress}}/api/country/{{countryId}}
 Content-Type: application/json
 
 {
-  "countryId": 5,
+  "countryId": 6,
   "name": "I edited this country with a service layer",
-  "shortName": "ec"
+  "shortName": "ec6"
 }
 
 ###
 
-GET {{HotelListing.Api_HostAddress}}/api/hotels
-
-###
-
-POST {{HotelListing.Api_HostAddress}}/api/hotels
+POST {{HotelListing.Api_HostAddress}}/api/hotel
 Content-Type: application/json
 
 {
-  "Name": "Another test hotel",
-  "Address": "Test",
-  "Rating": 4.9,
-  "CountryId": 5
+  "Name": "hotel blue",
+  "Address": "Test blue",
+  "Rating": 4.5,
+  "CountryId": 6
 }
 
 ###
 
-
-DELETE {{HotelListing.Api_HostAddress}}/api/hotels/{{id}}
+DELETE {{HotelListing.Api_HostAddress}}/api/hotel/{{id}}
 
 ###
+
 @id=5
-GET {{HotelListing.Api_HostAddress}}/api/hotels/{{id}}
+GET {{HotelListing.Api_HostAddress}}/api/hotel/{{id}}
 
 ###
 
-PUT {{HotelListing.Api_HostAddress}}/api/hotels/{{id}}
+PUT {{HotelListing.Api_HostAddress}}/api/hotel/{{id}}
 Content-Type: application/json
 
 {

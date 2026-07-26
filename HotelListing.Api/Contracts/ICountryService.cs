@@ -2,7 +2,7 @@
 
 namespace HotelListing.Api.Contracts
 {
-    public interface ICountriesService
+    public interface ICountryService
     {
         Task<bool> CountryExistsAsync(int? countryId);
         Task<GetCountryDto> CreateCountryAsync(CreateCountryDto countryDto);

@@ -5,10 +5,10 @@ using HotelListing.Api.DTOs.Hotel;
 
 [Route("api/[controller]")]
 [ApiController]
-public class HotelsController : ControllerBase
+public class HotelController : ControllerBase
 {
     private readonly HotelListingDbContext _context;
-    public HotelsController(HotelListingDbContext context)
+    public HotelController(HotelListingDbContext context)
     {
         _context = context;
     }
