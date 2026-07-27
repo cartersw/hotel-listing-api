@@ -12,6 +12,8 @@ builder.Services.AddDbContext<HotelListingDbContext>(options => options.UseSqlSe
 
 builder.Services.AddScoped<ICountryService, CountryService>();
 
+builder.Services.AddScoped<IHotelService, HotelService>();
+
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
