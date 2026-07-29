@@ -38,11 +38,7 @@ public class CountryController(ICountryService countryService) : ControllerBase
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{countryId}")]
     public async Task<IActionResult> PutCountry(int? countryId, UpdateCountryDto updateDto)
-    {
-        if (countryId != updateDto.CountryId)
-        {
-            return BadRequest();
-        }
+    { 
 
         await countryService.UpdateCountryAsync(countryId, updateDto);
 
