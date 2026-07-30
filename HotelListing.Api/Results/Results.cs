@@ -20,7 +20,7 @@
 
         public static Result BadRequest(params Error[] errors) => new(false, errors);
 
-        public static Result NotFound() => new(false, []);
+        public static Result NotFound(string? description = null) => new(false, [new Error("NotFound", description ?? "")]);
 
         public static Result Combine(params Result[] results) 
             => results.Any(r => !r.IsSuccess)
@@ -47,8 +47,8 @@
             new(false, default, errors);
         public static Result<T> BadRequest(params Error[] errors) => 
             new(false, default, errors);
-
-        public static Result<T> NotFound() => new(false, default, []);
+        public static Result<T> NotFound(string? description = null) =>
+            new(false, default, [new Error("NotFound", description ?? "")]);
        
 
 

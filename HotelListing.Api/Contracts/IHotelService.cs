@@ -9,7 +9,7 @@ namespace HotelListing.Api.Contracts
         Task<Result> DeleteHotel(int id);
         Task<Result<GetHotelDetailsDto>> GetHotelAsync(int id);
         Task<Result<IEnumerable<GetHotelDto>>> GetHotelsAsync();
-        bool HotelExists(int? id);
+        bool HotelExists(int id);
         Task<Result> UpdateHotelAsync(int id, UpdateHotelDto hotelDto);
     }
 }

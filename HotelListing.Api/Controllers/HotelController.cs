@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using HotelListing.Api.Data;
 using HotelListing.Api.DTOs.Hotel;
 using HotelListing.Api.Contracts;
+using HotelListing.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class HotelController : ControllerBase
+public class HotelController : ApiControllerBase
 {
     private readonly IHotelService _hotelService;
     public HotelController(IHotelService hotelService)
@@ -18,10 +19,10 @@ public class HotelController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GetHotelDto>>> GetHotels()
     {
-        var hotels = await _hotelService.GetHotelsAsync();  
-   
+        var result = await _hotelService.GetHotelsAsync();
 
-        return Ok(hotels);
+
+        return ToActionResult(result);
 
     }
 
@@ -29,14 +30,10 @@ public class HotelController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<GetHotelDetailsDto>> GetHotel(int id)
     {
-        var hotel = await _hotelService.GetHotelAsync(id);
+        var result = await _hotelService.GetHotelAsync(id);
 
-        if (hotel == null)
-        {
-            return NotFound();
-        }
 
-        return hotel;
+        return ToActionResult(result);
     }
 
     // PUT: api/Hotel/5
@@ -44,14 +41,9 @@ public class HotelController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutHotel(int id, UpdateHotelDto hotelDto)
     {
-        if (id != hotelDto.Id)
-        {
-            return BadRequest();
-        }
+        var result = await _hotelService.UpdateHotelAsync(id, hotelDto);
 
-        await _hotelService.UpdateHotelAsync(id, hotelDto);
-
-        return NoContent();
+        return ToActionResult(result);
     }
 
     // POST: api/Hotel
@@ -60,19 +52,24 @@ public class HotelController : ControllerBase
     public async Task<ActionResult<GetHotelDetailsDto>> PostHotel(CreateHotelDto hotelDto)
     {
 
-        var returnDto = await _hotelService.CreateHotelAsync(hotelDto);
+        var result = await _hotelService.CreateHotelAsync(hotelDto);
+
+        if (!result.IsSuccess)
+        {
+            return MapErrorsToResponse(result.Errors);
+        }
 
 
-        return CreatedAtAction("GetHotel", new { id = returnDto.Id }, returnDto);
+        return CreatedAtAction("GetHotel", new { id = result.Value!.Id }, result.Value);
     }
 
     // DELETE: api/Hotel/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteHotel(int id)
     {
-        await _hotelService.DeleteHotel(id);
+        var result = await _hotelService.DeleteHotel(id);
 
-        return NoContent();
+        return ToActionResult(result);
     }
 
 }

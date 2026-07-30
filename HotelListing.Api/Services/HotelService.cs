@@ -99,8 +99,6 @@ namespace HotelListing.Api.Services
 
             return Result<GetHotelDetailsDto>.Success(resultHotelDto);
 
-
-
         }
 
 
@@ -118,7 +116,7 @@ namespace HotelListing.Api.Services
         }
 
 
-        public bool HotelExists(int? id)
+        public bool HotelExists(int id)
         {
             return context.Hotels.Any(e => e.Id == id);
         }
