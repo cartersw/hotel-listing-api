@@ -11,7 +11,7 @@ POST {{HotelListing.Api_HostAddress}}/api/country
 Content-Type: application/json
 
 {
-  "name": "Test country with dto and service layer 3",
+  "name": "Test country with dto and service layer 164",
   "shortName": "s3"
 }
 
@@ -53,7 +53,7 @@ DELETE {{HotelListing.Api_HostAddress}}/api/hotel/{{id}}
 
 ###
 
-@id=11
+@id=1
 GET {{HotelListing.Api_HostAddress}}/api/hotel/{{id}}
 
 ###

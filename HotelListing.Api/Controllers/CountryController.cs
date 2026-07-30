@@ -16,34 +16,28 @@ public class CountryController(ICountryService countryService) : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountry()
     {
-        var resultDto = await countryService.GetCountriesAsync();
+        var result = await countryService.GetCountriesAsync();
 
-        return Ok(resultDto);
+        return ToActionResult(result);
     }
 
     // GET: api/Country/5
     [HttpGet("{countryid}")]
     public async Task<ActionResult<GetCountryDetailsDto>> GetCountry(int countryId)
     {
-        var resultDto = await countryService.GetCountryAsync(countryId);
+        var result = await countryService.GetCountryAsync(countryId);
 
-        if (resultDto == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(resultDto);
+        return ToActionResult(result);
     }
 
     // PUT: api/Country/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{countryId}")]
-    public async Task<IActionResult> PutCountry(int? countryId, UpdateCountryDto updateDto)
+    public async Task<IActionResult> PutCountry(int countryId, UpdateCountryDto updateDto)
     { 
+        var result = await countryService.UpdateCountryAsync(countryId, updateDto);
 
-        await countryService.UpdateCountryAsync(countryId, updateDto);
-
-        return NoContent();
+        return ToActionResult(result);
     }
 
     // POST: api/Country
@@ -51,19 +45,24 @@ public class CountryController(ICountryService countryService) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<GetCountryDetailsDto>> PostCountry(CreateCountryDto createDto)
     {
-        var resultDto = await countryService.CreateCountryAsync(createDto);
+        var result = await countryService.CreateCountryAsync(createDto);
 
-        return CreatedAtAction(nameof(GetCountry), new { countryId = resultDto.CountryId }, resultDto); 
+        if (!result.IsSuccess)
+        {
+            return MapErrorsToResponse(result.Errors);
+        }
+
+        return CreatedAtAction(nameof(GetCountry), new { countryId = result.Value!.CountryId }, result.Value); 
     }
 
     // DELETE: api/Country/5
     [HttpDelete("{countryId}")]
-    public async Task<IActionResult> DeleteCountry(int? countryId)
-    {
+    public async Task<ActionResult> DeleteCountry(int? countryId) 
+    { 
+    
+        var result = await countryService.DeleteCountryAsync(countryId);
 
-        await countryService.DeleteCountryAsync(countryId);
-
-        return NoContent();
+        return ToActionResult(result);
     }
 
     private ActionResult<T> ToActionResult<T>(Result<T> result) =>
@@ -84,7 +83,7 @@ public class CountryController(ICountryService countryService) : ControllerBase
             "BadRequest" => BadRequest(e.Description),
             "Validation" => BadRequest(e.Description),
             "Conflict" => Conflict(e.Description),
-            _ => Problem(detail: string.Join(": ", errors.Select(x => x.Description)), title: e.code)
+            _ => Problem(detail: string.Join(": ", errors.Select(x => x.Description)), title: e.Code)
         };
     }
     

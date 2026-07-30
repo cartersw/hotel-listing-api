@@ -20,7 +20,7 @@ namespace HotelListing.Api.Services
             return Result<IEnumerable<GetCountryDto>>.Success(countries);
         }
 
-        public async Task<Result<GetCountryDetailsDto?>> GetCountryAsync(int countryId)
+        public async Task<Result<GetCountryDetailsDto>> GetCountryAsync(int countryId)
         {
             var country = await context.Countries
             .Where(c => c.CountryId == countryId)
@@ -37,7 +37,7 @@ namespace HotelListing.Api.Services
                 )).ToList()
             )).FirstOrDefaultAsync();
             
-            return country != null ? Result<GetCountryDetailsDto?>.Success(country) : Result<GetCountryDetailsDto?>.NotFound();
+            return country != null ? Result<GetCountryDetailsDto>.Success(country) : Result<GetCountryDetailsDto>.NotFound();
         }
         
 
