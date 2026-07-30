@@ -35,7 +35,7 @@ public class CountryController(ICountryService countryService) : ApiControllerBa
     // PUT: api/Country/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{countryId}")]
-    public async Task<IActionResult> PutCountry(int countryId, UpdateCountryDto updateDto)
+    public async Task<ActionResult> PutCountry(int countryId, UpdateCountryDto updateDto)
     { 
         var result = await countryService.UpdateCountryAsync(countryId, updateDto);
 

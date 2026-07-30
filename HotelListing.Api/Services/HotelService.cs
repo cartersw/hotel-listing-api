@@ -1,25 +1,28 @@
 ﻿using HotelListing.Api.Contracts;
 using HotelListing.Api.Data;
 using HotelListing.Api.DTOs.Hotel;
+using HotelListing.Api.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing.Api.Services
 {
     public class HotelService(HotelListingDbContext context) : IHotelService
     {
-        public async Task<IEnumerable<GetHotelDto>> GetHotelsAsync()
+        public async Task<Result<IEnumerable<GetHotelDto>>> GetHotelsAsync()
         {
-            return await context.Hotels.Select(h => new GetHotelDto(
+            var hotels = await context.Hotels.Select(h => new GetHotelDto(
                 h.Id,
                 h.Name,
                 h.Address,
                 h.Rating,
                 h.Country!.Name
             )).ToListAsync();
+
+            return Result<IEnumerable<GetHotelDto>>.Success(hotels);
         }
-        public async Task<GetHotelDetailsDto?> GetHotelAsync(int id)
+        public async Task<Result<GetHotelDetailsDto>> GetHotelAsync(int id)
         {
-            return await context.Hotels
+            var hotel = await context.Hotels
             .Where(h => h.Id == id)
             .Select(h => new GetHotelDetailsDto(
                 h.Id,
@@ -28,15 +31,23 @@ namespace HotelListing.Api.Services
                 h.Rating,
                 h.CountryId
             )).FirstOrDefaultAsync();
+
+            return hotel != null ? Result<GetHotelDetailsDto>.Success(hotel) : Result<GetHotelDetailsDto>.NotFound();
         }
 
-        public async Task UpdateHotelAsync(int id, UpdateHotelDto hotelDto)
+        public async Task<Result> UpdateHotelAsync(int id, UpdateHotelDto hotelDto)
         {
+
+            if(id != hotelDto.Id)
+            {
+                return Result.BadRequest(new Error("Validation", "Id route value does not match payload id"));
+            }
+
             var hotel = await context.Hotels.FindAsync(id);
 
             if (hotel == null)
             {
-                throw new KeyNotFoundException($"Hotel with id {id} was not found.");
+                return Result.NotFound();
             }
 
             hotel.Name = hotelDto.Name;
@@ -54,17 +65,20 @@ namespace HotelListing.Api.Services
             {
                 if (!HotelExists(id))
                 {
-                    throw new KeyNotFoundException($"Hotel with id {id} was not found.");
+                    Result.NotFound();
                 }
                 else
                 {
                     throw;
                 }
             }
+
+            return Result.Success();
         }
 
-        public async Task<GetHotelDetailsDto> CreateHotelAsync(CreateHotelDto hotelDto)
+        public async Task<Result<GetHotelDetailsDto>> CreateHotelAsync(CreateHotelDto hotelDto)
         {
+
             var hotel = new Hotel
             {
                 Name = hotelDto.Name,
@@ -72,33 +86,46 @@ namespace HotelListing.Api.Services
                 Rating = hotelDto.Rating,
                 CountryId = hotelDto.CountryId
             };
+
             context.Hotels.Add(hotel);
             await context.SaveChangesAsync();
-            return new GetHotelDetailsDto(
+            var resultHotelDto = new GetHotelDetailsDto(
                 hotel.Id,
                 hotel.Name,
                 hotel.Address,
                 hotel.Rating,
                 hotel.CountryId
             );
+
+            return Result<GetHotelDetailsDto>.Success(resultHotelDto);
+
+
+
         }
 
 
-        public async Task DeleteHotel(int id)
+        public async Task<Result> DeleteHotel(int id)
         {
             var hotel = await context.Hotels.FindAsync(id);
             if (hotel == null)
             {
-                throw new KeyNotFoundException($"Hotel with id {id} was not found.");
+                return Result.NotFound();
             }
             context.Hotels.Remove(hotel);
             await context.SaveChangesAsync();
+
+            return Result.Success();
         }
 
 
         public bool HotelExists(int? id)
         {
             return context.Hotels.Any(e => e.Id == id);
+        }
+
+        public bool HotelExists(string name)
+        {
+            return context.Hotels.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim()); ;
         }
 
 
