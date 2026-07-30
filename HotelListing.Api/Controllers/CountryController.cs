@@ -6,10 +6,12 @@ using HotelListing.Api.DTOs.Hotel;
 using HotelListing.Api.Contracts;
 using HotelListing.Api.Services;
 using HotelListing.Api.Results;
+using HotelListing.Api.Controllers;
+
 
 [Route("api/[controller]")]
 [ApiController]
-public class CountryController(ICountryService countryService) : ControllerBase
+public class CountryController(ICountryService countryService) : ApiControllerBase
 {
 
     // GET: api/Country
@@ -65,26 +67,5 @@ public class CountryController(ICountryService countryService) : ControllerBase
         return ToActionResult(result);
     }
 
-    private ActionResult<T> ToActionResult<T>(Result<T> result) =>
-        result.IsSuccess ? Ok(result.Value) : MapErrorsToResponse(result.Errors);
-
-    private ActionResult ToActionResult(Result result) =>
-        result.IsSuccess ? NoContent() : MapErrorsToResponse(result.Errors);
-
-    private ActionResult MapErrorsToResponse(Error[] errors)
-    {
-        if (errors == null || errors.Length == 0) return Problem();
-
-        var e = errors[0];
-
-        return e.Code switch
-        {
-            "NotFound" => NotFound(e.Description),
-            "BadRequest" => BadRequest(e.Description),
-            "Validation" => BadRequest(e.Description),
-            "Conflict" => Conflict(e.Description),
-            _ => Problem(detail: string.Join(": ", errors.Select(x => x.Description)), title: e.Code)
-        };
-    }
     
 }
