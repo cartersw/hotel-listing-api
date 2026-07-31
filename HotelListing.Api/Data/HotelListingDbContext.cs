@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing.Api.Data
 {
-    public class HotelListingDbContext : IdentityDbContext<IdentityUser>
+    public class HotelListingDbContext : IdentityDbContext<ApplicationUser>
     {
         public HotelListingDbContext(DbContextOptions<HotelListingDbContext> options) : base(options)
         {
