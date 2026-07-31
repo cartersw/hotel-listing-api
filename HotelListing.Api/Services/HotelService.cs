@@ -50,6 +50,13 @@ namespace HotelListing.Api.Services
                 return Result.NotFound();
             }
 
+            var countryExists = await context.Countries.AnyAsync(c => c.CountryId == hotelDto.CountryId);
+
+            if (!countryExists)
+            {
+                return Result.NotFound();
+            }
+
             hotel.Name = hotelDto.Name;
             hotel.Address = hotelDto.Address;
             hotel.Rating = hotelDto.Rating;
