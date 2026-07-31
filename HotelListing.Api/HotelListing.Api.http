@@ -41,8 +41,8 @@ POST {{HotelListing.Api_HostAddress}}/api/hotel
 Content-Type: application/json
 
 {
-  "Name": "hotel blue azul",
-  "Address": "Test blue",
+  "Name": "hotel hotel",
+  "Address": "Test",
   "Rating": 4.5,
   "CountryId": 3
 }

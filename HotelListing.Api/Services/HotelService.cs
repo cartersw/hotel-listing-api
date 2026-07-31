@@ -79,6 +79,13 @@ namespace HotelListing.Api.Services
         public async Task<Result<GetHotelDetailsDto>> CreateHotelAsync(CreateHotelDto hotelDto)
         {
 
+            var countryExists = await context.Countries.AnyAsync(c => c.CountryId == hotelDto.CountryId);
+
+            if (!countryExists)
+            {
+                return Result<GetHotelDetailsDto>.NotFound();
+            }
+
             var hotel = new Hotel
             {
                 Name = hotelDto.Name,
