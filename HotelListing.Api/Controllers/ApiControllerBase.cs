@@ -1,10 +1,11 @@
-﻿using HotelListing.Api.Results;
+﻿using HotelListing.Api.Constants;
+using HotelListing.Api.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelListing.Api.Controllers
 
 {
-    public class ApiControllerBase : ControllerBase
+    public abstract class ApiControllerBase : ControllerBase
     {
         protected ActionResult<T> ToActionResult<T>(Result<T> result) =>
             result.IsSuccess ? Ok(result.Value) : MapErrorsToResponse(result.Errors);
@@ -22,10 +23,10 @@ namespace HotelListing.Api.Controllers
 
             return e.Code switch
             {
-                "NotFound" => NotFound(e.Description),
-                "BadRequest" => BadRequest(e.Description),
-                "Validation" => BadRequest(e.Description),
-                "Conflict" => Conflict(e.Description),
+                ErrorCodes.NotFound => NotFound(e.Description),
+                ErrorCodes.BadRequest => BadRequest(e.Description),
+                ErrorCodes.Validation => BadRequest(e.Description),
+                ErrorCodes.Conflict => Conflict(e.Description),
                 _ => Problem(detail: string.Join(": ", errors.Select(x => x.Description)), title: e.Code)
             };
         }
