@@ -15,4 +15,5 @@ namespace HotelListing.Api.DTOs.Auth
 
         [Required, MaxLength(100)]
         public string LastName { get; set; } = string.Empty;
+    }
 }
