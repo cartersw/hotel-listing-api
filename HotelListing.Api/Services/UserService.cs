@@ -10,7 +10,7 @@ namespace HotelListing.Api.Services
 {
     public class UserService(UserManager<ApplicationUser> userManager) : IUserService
     {
-        public async Task<Result> RegisterAsync(RegisterUserDto registerUserDto)
+        public async Task<Result> RegisterUserAsync(RegisterUserDto registerUserDto)
         {
             var user = new ApplicationUser
             {
@@ -32,23 +32,23 @@ namespace HotelListing.Api.Services
         }
 
         [HttpPost("login")]
-        public async Task<Result> LoginAsync(LoginUserDto loginUserDto)
+        public async Task<Result> LoginUserAsync(LoginUserDto loginUserDto)
         {
             var user = await userManager.FindByEmailAsync(loginUserDto.Email);
 
             if (user == null)
             {
-                return Result.Unauthorized();
+                return Result.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
 
             }
 
             var isPasswordValid = await userManager.CheckPasswordAsync(user, loginUserDto.Password);
             if (isPasswordValid)
             {
-                return Unauthorized(new { message = "Invalid Credentials" });
+                return Result.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
             }
 
-            return Ok();
+            return Result.Success();
         }
     }
 }
