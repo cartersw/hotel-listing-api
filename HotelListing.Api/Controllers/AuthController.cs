@@ -4,9 +4,9 @@ namespace HotelListing.Api.Controllers
 {
     public class AuthController : ApiControllerBase
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Register(RegisterUserDto registerUserDto)
         {
-            return Ok();
+
         }
     }
 }
