@@ -40,23 +40,23 @@ namespace HotelListing.Api.Services
         }
 
         [HttpPost("login")]
-        public async Task<Result> LoginUserAsync(LoginUserDto loginUserDto)
+        public async Task<Result<string>> LoginUserAsync(LoginUserDto loginUserDto)
         {
             var user = await userManager.FindByEmailAsync(loginUserDto.Email);
 
             if (user == null)
             {
-                return Result.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
+                return Result<string>.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
 
             }
 
             var isPasswordValid = await userManager.CheckPasswordAsync(user, loginUserDto.Password);
             if (isPasswordValid)
             {
-                return Result.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
+                return Result<string>.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
             }
 
-            return Result.Success();
+            return Result<string>.Success("Login succesful");
         }
     }
 }

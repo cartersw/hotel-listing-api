@@ -28,7 +28,7 @@ namespace HotelListing.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginUserDto loginUserDto)
+        public async Task<ActionResult<string>> Login(LoginUserDto loginUserDto)
         {
             var result = await userService.LoginUserAsync(loginUserDto);
 
