@@ -42,6 +42,20 @@ namespace HotelListing.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserDto loginUserDto)
         {
+            var user = await userManager.FindByEmailAsync(loginUserDto.Email);
+
+            if(user == null)
+            {
+                return Unauthorized(new { message = "Invalid Credentials" });
+
+            }
+
+            var isPasswordValid = await userManager.CheckPasswordAsync(user, loginUserDto.Password);
+            if (isPasswordValid)
+            {
+                return Unauthorized(new { message = "Invalid Credentials" });
+            }
+
             return Ok();
         }
 
