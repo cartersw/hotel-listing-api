@@ -3,3 +3,4 @@ AddScoped - created at time of request, disposed at the end of request
 AddSingleton - created at time of request, disposed at the end of application
 
 dotnet ef migrations add ... -> queues up a db change that then can be processed with -> dotnet ef database update
+
