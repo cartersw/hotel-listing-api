@@ -1,4 +1,5 @@
 ﻿using HotelListing.Api.Constants;
+using HotelListing.Api.Contracts;
 using HotelListing.Api.Data;
 using HotelListing.Api.DTOs.Auth;
 using HotelListing.Api.Results;
@@ -14,29 +15,16 @@ namespace HotelListing.Api.Controllers
     [AllowAnonymous]
 
 
-    public class AuthController(UserManager<ApplicationUser> userManager) : ApiControllerBase
+    public class AuthController(IUserService userService) : ApiControllerBase
     {
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserDto registerUserDto)
         {
-            var user = new ApplicationUser
-            {
-                Email = registerUserDto.Email,
-                FirstName = registerUserDto.FirstName,
-                LastName = registerUserDto.LastName,
-                UserName = registerUserDto.Email
-            };
 
-            var result = await userManager.CreateAsync(user, registerUserDto.Password);
-            
-            if (!result.Succeeded)
-            {
-                var errors = result.Errors.Select(e => new Error(ErrorCodes.BadRequest, e.Description)).ToArray();
-                return MapErrorsToResponse(errors);
-            }
+            var result = await userService.RegisterUserAsync(registerUserDto);
 
-            return Ok();
+            return ToActionResult(result);
         }
 
         [HttpPost("login")]

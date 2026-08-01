@@ -20,6 +20,8 @@ builder.Services.AddScoped<ICountryService, CountryService>();
 
 builder.Services.AddScoped<IHotelService, HotelService>();
 
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
