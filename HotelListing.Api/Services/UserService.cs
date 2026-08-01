@@ -10,7 +10,7 @@ namespace HotelListing.Api.Services
 {
     public class UserService(UserManager<ApplicationUser> userManager) : IUserService
     {
-        public async Task<Result> RegisterUserAsync(RegisterUserDto registerUserDto)
+        public async Task<Result<RegisteredUserDto>> RegisterUserAsync(RegisterUserDto registerUserDto)
         {
             var user = new ApplicationUser
             {
@@ -25,10 +25,18 @@ namespace HotelListing.Api.Services
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => new Error(ErrorCodes.BadRequest, e.Description)).ToArray();
-                return Result.BadRequest(errors);
+                return Result<RegisteredUserDto>.BadRequest(errors);
             }
 
-            return Result.Success();
+            var registeredUser = new RegisteredUserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+
+            return Result<RegisteredUserDto>.Success(registeredUser);
         }
 
         [HttpPost("login")]

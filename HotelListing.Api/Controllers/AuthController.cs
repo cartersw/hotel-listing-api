@@ -19,7 +19,7 @@ namespace HotelListing.Api.Controllers
     {
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterUserDto registerUserDto)
+        public async Task<ActionResult<RegisteredUserDto>> Register(RegisterUserDto registerUserDto)
         {
 
             var result = await userService.RegisterUserAsync(registerUserDto);
