@@ -51,7 +51,7 @@ namespace HotelListing.Api.Services
             }
 
             var isPasswordValid = await userManager.CheckPasswordAsync(user, loginUserDto.Password);
-            if (isPasswordValid)
+            if (!isPasswordValid)
             {
                 return Result<string>.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
             }
