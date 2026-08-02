@@ -40,6 +40,8 @@ namespace HotelListing.Api.Services
                 LastName = user.LastName
             };
 
+            await userManager.AddToRoleAsync(user, "User");
+
             return Result<RegisteredUserDto>.Success(registeredUser);
         }
 

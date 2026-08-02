@@ -80,9 +80,9 @@ POST {{HotelListing.Api_HostAddress}}/api/auth/register
 Content-Type: application/json
 
 {
-  "Email": "test1@example.com",
-  "FirstName": "Test",
-  "LastName": "User",
+  "Email": "appuser@example.com",
+  "FirstName": "regular",
+  "LastName": "guy",
   "Password": "Password123!"
 }
 
