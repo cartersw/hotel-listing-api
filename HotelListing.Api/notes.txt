@@ -10,3 +10,11 @@ no Di = HotelService -> CountryService
 DI = HotelService -> ICountryService <- CountryService
 
 dotnet user-secrets set "blah:blah" "value" -> sets a secret in the user secrets store
+
+remove whole line completions 
+
+calling method in override using base. means you can call base method implementation before your overriden implementation
+
+b.HasIndex(k => k.Key).IsUnique();
+creates an index: seperate entity from table using the given column as the key for faster reads using this key
+index has unique property due to isunique() 
