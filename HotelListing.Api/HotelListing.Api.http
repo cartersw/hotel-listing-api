@@ -4,7 +4,8 @@
 
 
 GET {{HotelListing.Api_HostAddress}}/api/country
-X-Api-Key: fakeapikey
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjN2I0NzdkNC02YzBiLTQ3NWUtYTExOS0zZjhmZmZhMWE1NzYiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJqdGkiOiI5MDY2ODliNy0yNDZjLTRmZTMtODQ1My00MTc0ZjkxNTdiODMiLCJuYW1lIjoiVXNlciwgVGVzdCIsImV4cCI6MTc4NTY0OTY3MCwiaXNzIjoiSG90ZWxMaXN0aW5nQVBJIiwiYXVkIjoiSG90ZWxMaXN0aW5nQVBJQ2xpZW50In0.SwpPaeYw-N7ya3dXIMjBVqYvPP3RlwpwcEaFrj7XhUQ
+//X-Api-Key: fakeapikey
 ###
 
 POST {{HotelListing.Api_HostAddress}}/api/country

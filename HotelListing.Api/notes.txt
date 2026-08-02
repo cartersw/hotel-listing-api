@@ -19,7 +19,11 @@ b.HasIndex(k => k.Key).IsUnique();
 creates an index: seperate entity from table using the given column as the key for faster reads using this key
 index has unique property due to isunique() 
 
+jwt = header.payload.(header.payload signed by securitykey)
+payload and header can be decoded by anyone and changed, but they will not be able to create the proper signature at the end without the securitykey that the issuer has
+jwt.io
 
 --TODO
 Implement DB Api key creation
 Implement DB Api key checking in apikeyvalidatorservice
+

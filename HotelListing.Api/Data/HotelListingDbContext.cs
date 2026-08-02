@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace HotelListing.Api.Data
 {
@@ -19,10 +20,7 @@ namespace HotelListing.Api.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<ApiKey>(b =>
-            {
-                b.HasIndex(k => k.Key).IsUnique();
-            });
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
