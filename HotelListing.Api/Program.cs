@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using HotelListing.Api.Contracts;
 using HotelListing.Api.Services;
 using Microsoft.AspNetCore.Identity;
+using HotelListing.Api.Handler;
+using HotelListing.Api.Constants;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,10 @@ builder.Services.AddDbContext<HotelListingDbContext>(options => options.UseSqlSe
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<HotelListingDbContext>();
 
+builder.Services.AddAuthentication(AuthenticationDefaults.ApiKeyScheme)
+    .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(
+    AuthenticationDefaults.ApiKeyScheme, options => { });
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<ICountryService, CountryService>();
@@ -21,6 +28,8 @@ builder.Services.AddScoped<ICountryService, CountryService>();
 builder.Services.AddScoped<IHotelService, HotelService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IApiKeyValidatorService, ApiKeyValidatorService>();
 
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
@@ -40,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

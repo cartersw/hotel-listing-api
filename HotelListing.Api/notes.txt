@@ -4,3 +4,7 @@ AddSingleton - created at time of request, disposed at the end of application
 
 dotnet ef migrations add ... -> queues up a db change that then can be processed with -> dotnet ef database update
 
+DI = class receives objects it depends on from external source rather than creating them itself.
+Implementation for interfaces comes from outside source (DI container)
+no Di = HotelService -> CountryService
+DI = HotelService -> ICountryService <- CountryService
