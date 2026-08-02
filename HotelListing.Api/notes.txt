@@ -8,3 +8,5 @@ DI = class receives objects it depends on from external source rather than creat
 Implementation for interfaces comes from outside source (DI container)
 no Di = HotelService -> CountryService
 DI = HotelService -> ICountryService <- CountryService
+
+dotnet user-secrets set "blah:blah" "value" -> sets a secret in the user secrets store

@@ -2,11 +2,11 @@
 
 namespace HotelListing.Api.Services
 {
-    public class ApiKeyValidatorService : IApiKeyValidatorService
+    public class ApiKeyValidatorService(IConfiguration configuration) : IApiKeyValidatorService
     {
         public Task<bool> IsValidAsync(string apiKey, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(apiKey.Equals(configuration["ApiAuthentication:ApiKey"]));
         }
     }
 }
