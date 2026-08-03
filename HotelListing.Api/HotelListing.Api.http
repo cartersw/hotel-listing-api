@@ -91,8 +91,17 @@ Content-Type: application/json
 POST {{HotelListing.Api_HostAddress}}/api/auth/login
 Content-Type: application/json
 {
-  "Email": "test@example.com",
+  "Email": "appuser@example.com",
   "Password": "Password123!"
+}
+
+###
+@userId=036e6c98-c058-40e1-8bed-9a78e425dd95
+POST {{HotelListing.Api_HostAddress}}/api/auth/{{userId}}/roles
+Content-Type: application/json
+
+{
+  "roleName": "Administrator"
 }
 
 ###

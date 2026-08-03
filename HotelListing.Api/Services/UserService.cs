@@ -67,7 +67,7 @@ namespace HotelListing.Api.Services
             return Result<string>.Success(token);
         }
 
-        public async Task<Result> AssignRoleAsync(Guid userId, string roleName)
+        public async Task<Result> AssignRoleAsync(Guid userId, AssignRoleDto assignRoleDto)
         {
             var user = await userManager.FindByIdAsync(userId.ToString());
             if(user == null)
@@ -75,17 +75,17 @@ namespace HotelListing.Api.Services
                 return Result.NotFound();
             }
 
-            if(!await roleManager.RoleExistsAsync(roleName))
+            if(!await roleManager.RoleExistsAsync(assignRoleDto.RoleName))
             {
                 return Result.BadRequest(new Error(ErrorCodes.BadRequest, "Role does not exist"));
             }
 
-            if(await userManager.IsInRoleAsync(user, roleName))
+            if(await userManager.IsInRoleAsync(user, assignRoleDto.RoleName))
             {
                 return Result.Failure(new Error(ErrorCodes.Conflict, "User already has this role"));
             }
 
-            await userManager.AddToRoleAsync(user, roleName);
+            await userManager.AddToRoleAsync(user, assignRoleDto.RoleName);
 
             return Result.Success();
         }

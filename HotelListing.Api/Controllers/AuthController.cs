@@ -36,9 +36,9 @@ namespace HotelListing.Api.Controllers
         }
 
         [HttpPost("{userId:guid}/roles")]
-        public async Task<IActionResult> AssignRole(Guid userId, string roleName)
+        public async Task<IActionResult> AssignRole(Guid userId, AssignRoleDto assignRoleDto)
         {
-            var result = await userService.AssignRoleAsync(userId, roleName);
+            var result = await userService.AssignRoleAsync(userId, assignRoleDto);
 
             return ToActionResult(result);
         }
