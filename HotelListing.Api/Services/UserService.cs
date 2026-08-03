@@ -12,7 +12,7 @@ using System.Text;
 
 namespace HotelListing.Api.Services
 {
-    public class UserService(UserManager<ApplicationUser> userManager, IConfiguration configuration) : IUserService
+    public class UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration) : IUserService
     {
         public async Task<Result<RegisteredUserDto>> RegisterUserAsync(RegisterUserDto registerUserDto)
         {
@@ -66,6 +66,31 @@ namespace HotelListing.Api.Services
 
             return Result<string>.Success(token);
         }
+
+        public async Task<Result> AssignRoleAsync(Guid userId, string roleName)
+        {
+            var user = await userManager.FindByIdAsync(userId.ToString());
+            if(user == null)
+            {
+                return Result.NotFound();
+            }
+
+            if(!await roleManager.RoleExistsAsync(roleName))
+            {
+                return Result.BadRequest(new Error(ErrorCodes.BadRequest, "Role does not exist"));
+            }
+
+            if(await userManager.IsInRoleAsync(user, roleName))
+            {
+                return Result.Failure(new Error(ErrorCodes.Conflict, "User already has this role"));
+            }
+
+            await userManager.AddToRoleAsync(user, roleName);
+
+            return Result.Success();
+        }
+
+
 
 
         private async Task<string> GenerateToken(ApplicationUser user)

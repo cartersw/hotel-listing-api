@@ -35,6 +35,13 @@ namespace HotelListing.Api.Controllers
             return ToActionResult(result);
         }
 
+        [HttpPost("{userId:guid}/roles")]
+        public async Task<IActionResult> AssignRole(Guid userId, string roleName)
+        {
+            var result = await userService.AssignRoleAsync(userId, roleName);
+
+            return ToActionResult(result);
+        }
 
     }
 
