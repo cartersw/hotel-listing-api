@@ -12,12 +12,13 @@ using Microsoft.AspNetCore.Authorization;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CountryController(ICountryService countryService) : ApiControllerBase
 {
 
     // GET: api/Country
     [HttpGet]
-    [Authorize]
+    
     public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountry()
     {
         var result = await countryService.GetCountriesAsync();
@@ -37,6 +38,7 @@ public class CountryController(ICountryService countryService) : ApiControllerBa
     // PUT: api/Country/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{countryId}")]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult> PutCountry(int countryId, UpdateCountryDto updateDto)
     { 
         var result = await countryService.UpdateCountryAsync(countryId, updateDto);
@@ -47,6 +49,7 @@ public class CountryController(ICountryService countryService) : ApiControllerBa
     // POST: api/Country
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult<GetCountryDetailsDto>> PostCountry(CreateCountryDto createDto)
     {
         var result = await countryService.CreateCountryAsync(createDto);
@@ -61,6 +64,7 @@ public class CountryController(ICountryService countryService) : ApiControllerBa
 
     // DELETE: api/Country/5
     [HttpDelete("{countryId}")]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult> DeleteCountry(int? countryId) 
     { 
     
