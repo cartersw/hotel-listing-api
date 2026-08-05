@@ -11,6 +11,7 @@ namespace HotelListing.Api.Services
     {
         public async Task<Result<IEnumerable<GetCountryDto>>> GetCountriesAsync()
         {
+
             var countries = await context.Countries.Select(c => new GetCountryDto(
                 c.CountryId,
                 c.Name,
