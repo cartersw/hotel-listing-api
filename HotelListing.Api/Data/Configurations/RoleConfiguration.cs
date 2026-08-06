@@ -22,6 +22,13 @@ namespace HotelListing.Api.Data.Configurations
                     Name = "User",
                     NormalizedName = "USER",
                     ConcurrencyStamp = "8d139698-a775-4684-abf8-2765e9bd24ce"
+                },
+                new IdentityRole
+                {
+                    Id = "f823e597-8558-4810-b6e6-570c4c0fcac7",
+                    Name = "Hotel Admin",
+                    NormalizedName = "HOTEL ADMIN",
+                    ConcurrencyStamp = "f823e597-8558-4810-b6e6-570c4c0fcac7"
                 }
                 );
         }

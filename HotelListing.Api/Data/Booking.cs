@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HotelListing.Api.Data.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotelListing.Api.Data
 {
@@ -16,7 +17,7 @@ namespace HotelListing.Api.Data
 
         public DateOnly CheckIn { get; set; }
 
-        public DateOnly Checkout { get; set; }  
+        public DateOnly Checkout { get; set; }
 
         public int Guests { get; set; }
 
@@ -25,7 +26,8 @@ namespace HotelListing.Api.Data
         public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAtUtc { get; set; }
 
-        public string Status = "Pending, Confirmed, Cancelled";
+        public BookingStatus Status { get; set; } = BookingStatus.Pending;
     }
-   }
+
+}
 
