@@ -49,6 +49,8 @@ builder.Services.AddScoped<IHotelService, HotelService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IBookingService, BookingService>();
+
 builder.Services.AddScoped<IApiKeyValidatorService, ApiKeyValidatorService>();
 
 builder.Services.AddControllers().AddJsonOptions(opt =>

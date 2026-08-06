@@ -23,6 +23,12 @@ jwt = header.payload.(header.payload signed by securitykey)
 payload and header can be decoded by anyone and changed, but they will not be able to create the proper signature at the end without the securitykey that the issuer has
 jwt.io
 
+endpoints should be hierarchical for understandability, for example a booking shouldnt exist without a hotel so
+api/hotels/{hotelid}/bookings
+instead of
+api/bookings
+
+
 --TODO
 Implement DB Api key creation
 Implement DB Api key checking in apikeyvalidatorservice
