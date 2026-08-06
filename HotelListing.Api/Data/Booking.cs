@@ -17,7 +17,7 @@ namespace HotelListing.Api.Data
 
         public DateOnly CheckIn { get; set; }
 
-        public DateOnly Checkout { get; set; }
+        public DateOnly CheckOut { get; set; }
 
         public int Guests { get; set; }
 

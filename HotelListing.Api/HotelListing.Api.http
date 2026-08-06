@@ -106,3 +106,8 @@ Content-Type: application/json
 }
 
 ###
+
+@hotelId=7
+GET {{HotelListing.Api_HostAddress}}/api/hotels/{{hotelId}}/bookings
+
+###

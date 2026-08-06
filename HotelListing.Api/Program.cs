@@ -43,6 +43,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<ICountryService, CountryService>();
 
 builder.Services.AddScoped<IHotelService, HotelService>();
