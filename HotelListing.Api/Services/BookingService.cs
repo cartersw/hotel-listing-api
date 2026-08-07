@@ -262,8 +262,7 @@ namespace HotelListing.Api.Services
 
             var booking = await context.Bookings.FirstOrDefaultAsync(b =>
                 b.Id == bookingId
-                && b.HotelId == hotelId
-                && b.UserId == userId);
+                && b.HotelId == hotelId);
 
             if (booking == null)
             {
@@ -307,8 +306,7 @@ namespace HotelListing.Api.Services
 
             var booking = await context.Bookings.FirstOrDefaultAsync(b =>
                 b.Id == bookingId
-                && b.HotelId == hotelId
-                && b.UserId == userId);
+                && b.HotelId == hotelId);
 
             if (booking == null)
             {
