@@ -208,6 +208,7 @@ namespace HotelListing.Api.Services
               .FindFirst(JwtRegisteredClaimNames.Sub)?
               .Value;
 
+
             if (string.IsNullOrWhiteSpace(userId))
             {
                 return Result.Failure(new Error(ErrorCodes.Validation, "Must be logged in to create a booking"));
@@ -237,6 +238,103 @@ namespace HotelListing.Api.Services
             return Result.Success();
 
         }
+
+        public async Task<Result> AdminCancelBookingAsync(int hotelId, int bookingId)
+        {
+            var userId = httpContextAccessor?
+              .HttpContext?
+              .User?
+              .FindFirst(JwtRegisteredClaimNames.Sub)?
+              .Value;
+
+            var isHotelAdminUser = await context.HotelAdmins
+                .AnyAsync(q => q.UserId == userId && q.HotelId == hotelId);
+
+            if (!isHotelAdminUser)
+            {
+                return Result.Failure(new Error(ErrorCodes.Forbid, "Administrator privileges required for this request"));
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Result.Failure(new Error(ErrorCodes.Validation, "Must be logged in to create a booking"));
+            }
+
+            var booking = await context.Bookings.FirstOrDefaultAsync(b =>
+                b.Id == bookingId
+                && b.HotelId == hotelId
+                && b.UserId == userId);
+
+            if (booking == null)
+            {
+                return Result.Failure(new Error(ErrorCodes.NotFound, "Booking does not exist"));
+            }
+
+            if (booking.Status == BookingStatus.Cancelled)
+            {
+                return Result.Failure(new Error(ErrorCodes.Conflict, "Cancelled bookings can not be modified"));
+            }
+
+            booking.Status = BookingStatus.Cancelled;
+
+            booking.UpdatedAtUtc = DateTime.UtcNow;
+
+            await context.SaveChangesAsync();
+
+            return Result.Success();
+        }
+
+        public async Task<Result> AdminConfirmBookingAsync(int hotelId, int bookingId)
+        {
+            var userId = httpContextAccessor?
+              .HttpContext?
+              .User?
+              .FindFirst(JwtRegisteredClaimNames.Sub)?
+              .Value;
+
+            var isHotelAdminUser = await context.HotelAdmins
+                .AnyAsync(q => q.UserId == userId && q.HotelId == hotelId);
+
+            if (!isHotelAdminUser)
+            {
+                return Result.Failure(new Error(ErrorCodes.Forbid, "Administrator privileges required for this request"));
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Result.Failure(new Error(ErrorCodes.Validation, "Must be logged in to create a booking"));
+            }
+
+            var booking = await context.Bookings.FirstOrDefaultAsync(b =>
+                b.Id == bookingId
+                && b.HotelId == hotelId
+                && b.UserId == userId);
+
+            if (booking == null)
+            {
+                return Result.Failure(new Error(ErrorCodes.NotFound, "Booking does not exist"));
+            }
+
+            if (booking.Status == BookingStatus.Cancelled)
+            {
+                return Result.Failure(new Error(ErrorCodes.Conflict, "Cancelled bookings can not be modified"));
+            }
+            
+            if (booking.Status == BookingStatus.Confirmed)
+            {
+                return Result.Failure(new Error(ErrorCodes.Conflict, "Booking is already confirmed"));
+            }
+
+            booking.Status = BookingStatus.Confirmed;
+
+            booking.UpdatedAtUtc = DateTime.UtcNow;
+            
+            await context.SaveChangesAsync();
+
+            return Result.Success();
+        }
+
+        
     }
 
     

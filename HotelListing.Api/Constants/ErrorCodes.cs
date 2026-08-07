@@ -8,5 +8,6 @@
         public const string Conflict = "Conflict";
         public const string Failure = "Failure";
         public const string Unauthorized = "Unauthorized";
+        public const string Forbid = "Forbid";
     }
 }
