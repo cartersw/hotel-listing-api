@@ -1,11 +1,13 @@
 ﻿using HotelListing.Api.Contracts;
 using HotelListing.Api.DTOs.Booking;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelListing.Api.Controllers
 {
     [Route("api/hotels/{hotelId:int}/bookings")]
     [ApiController]
+    [Authorize]
     public class HotelBookingController(IBookingService bookingService) : ApiControllerBase
     {
         [HttpGet]
@@ -48,6 +50,7 @@ namespace HotelListing.Api.Controllers
         }
 
         [HttpPut("{bookingId:int}/admin/cancel")]
+        [Authorize(Roles = "Hotel Admin, Administrator")]
         public async Task<IActionResult> AdminCancelBooking(
             [FromRoute] int hotelId,
             [FromRoute] int bookingId)
@@ -58,6 +61,7 @@ namespace HotelListing.Api.Controllers
         }
 
         [HttpPut("{bookingId:int}/admin/confirm")]
+        [Authorize(Roles = "Hotel Admin, Administrator")]
         public async Task<IActionResult> AdminConfirmBooking(
             [FromRoute] int hotelId,
             [FromRoute] int bookingId)
