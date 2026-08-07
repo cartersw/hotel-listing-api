@@ -160,6 +160,7 @@ namespace HotelListing.Api.Services
 
             var booking = await context.Bookings.FirstOrDefaultAsync(b => 
                 b.Id == bookingId
+                && b.HotelId == hotelId
                 && b.UserId == userId);
 
             if(booking == null)
@@ -197,6 +198,44 @@ namespace HotelListing.Api.Services
 
             return Result<GetBookingDto>.Success(updated);
             
+        }
+
+        public async Task<Result> CancelBookingAsync(int hotelId, int bookingId)
+        {
+            var userId = httpContextAccessor?
+              .HttpContext?
+              .User?
+              .FindFirst(JwtRegisteredClaimNames.Sub)?
+              .Value;
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Result.Failure(new Error(ErrorCodes.Validation, "Must be logged in to create a booking"));
+            }
+
+            var booking = await context.Bookings.FirstOrDefaultAsync(b =>
+                b.Id == bookingId
+                && b.HotelId == hotelId
+                && b.UserId == userId);
+
+            if (booking == null)
+            {
+                return Result.Failure(new Error(ErrorCodes.NotFound, "Booking does not exist"));
+            }
+
+            if (booking.Status == BookingStatus.Cancelled)
+            {
+                return Result.Failure(new Error(ErrorCodes.Conflict, "Cancelled bookings can not be modified"));
+            }
+
+            booking.Status = BookingStatus.Cancelled;
+
+            booking.UpdatedAtUtc = DateTime.UtcNow;
+
+            await context.SaveChangesAsync();
+
+            return Result.Success();
+
         }
     }
 

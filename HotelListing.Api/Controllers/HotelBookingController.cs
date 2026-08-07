@@ -37,6 +37,13 @@ namespace HotelListing.Api.Controllers
             return ToActionResult(result);
         }
 
-        
+        [HttpPut("{bookingId:int}/cancel")]
+        public async Task<IActionResult> CancelBooking(
+            [FromRoute] int hotelId,
+            [FromRoute] int bookingId)
+        {
+            var result = await bookingService.CancelBookingAsync(hotelId, bookingId);
+            return ToActionResult(result);
+        }
     }
 }
