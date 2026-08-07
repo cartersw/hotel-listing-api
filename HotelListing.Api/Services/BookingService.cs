@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace HotelListing.Api.Services
 {
-    public class BookingService(HotelListingDbContext context, IHttpContextAccessor httpContextAccessor) : IBookingService
+    public class BookingService(HotelListingDbContext context, IUserService userService) : IBookingService
     {
         public async Task<Result<IEnumerable<GetBookingDto>>> GetBookingsAsync(int hotelId)
         {
@@ -44,11 +44,7 @@ namespace HotelListing.Api.Services
         public async Task<Result<GetBookingDto>> CreateBookingAsync(int hotelId, CreateBookingDto createBookingDto)
         {
 
-            var userId = httpContextAccessor?
-                .HttpContext?
-                .User?
-                .FindFirst(JwtRegisteredClaimNames.Sub)?
-                .Value;
+            var userId = userService.UserId;
 
             if (string.IsNullOrWhiteSpace(userId))
             {
@@ -123,11 +119,7 @@ namespace HotelListing.Api.Services
 
         public async Task<Result<GetBookingDto>> UpdateBookingAsync(int hotelId, int bookingId, UpdateBookingDto updateBookingDto)
         {
-            var userId = httpContextAccessor?
-               .HttpContext?
-               .User?
-               .FindFirst(JwtRegisteredClaimNames.Sub)?
-               .Value;
+            var userId = userService.UserId;
 
             if (string.IsNullOrWhiteSpace(userId))
             {
@@ -202,11 +194,7 @@ namespace HotelListing.Api.Services
 
         public async Task<Result> CancelBookingAsync(int hotelId, int bookingId)
         {
-            var userId = httpContextAccessor?
-              .HttpContext?
-              .User?
-              .FindFirst(JwtRegisteredClaimNames.Sub)?
-              .Value;
+            var userId = userService.UserId;
 
 
             if (string.IsNullOrWhiteSpace(userId))
@@ -241,11 +229,7 @@ namespace HotelListing.Api.Services
 
         public async Task<Result> AdminCancelBookingAsync(int hotelId, int bookingId)
         {
-            var userId = httpContextAccessor?
-              .HttpContext?
-              .User?
-              .FindFirst(JwtRegisteredClaimNames.Sub)?
-              .Value;
+            var userId = userService.UserId;
 
             var isHotelAdminUser = await context.HotelAdmins
                 .AnyAsync(q => q.UserId == userId && q.HotelId == hotelId);
@@ -285,11 +269,7 @@ namespace HotelListing.Api.Services
 
         public async Task<Result> AdminConfirmBookingAsync(int hotelId, int bookingId)
         {
-            var userId = httpContextAccessor?
-              .HttpContext?
-              .User?
-              .FindFirst(JwtRegisteredClaimNames.Sub)?
-              .Value;
+            var userId = userService.UserId;
 
             var isHotelAdminUser = await context.HotelAdmins
                 .AnyAsync(q => q.UserId == userId && q.HotelId == hotelId);

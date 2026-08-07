@@ -11,6 +11,7 @@ namespace HotelListing.Api.Controllers
     public class HotelBookingController(IBookingService bookingService) : ApiControllerBase
     {
         [HttpGet]
+        [Authorize(Roles = "Hotel Admin, Administrator")]
         public async Task<ActionResult<IEnumerable<GetBookingDto>>> GetBookings([FromRoute]int hotelId)
         {
             var result = await bookingService.GetBookingsAsync(hotelId);

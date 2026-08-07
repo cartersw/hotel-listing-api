@@ -12,8 +12,18 @@ using System.Text;
 
 namespace HotelListing.Api.Services
 {
-    public class UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration) : IUserService
+    public class UserService(UserManager<ApplicationUser> userManager, 
+        RoleManager<IdentityRole> roleManager, 
+        IConfiguration configuration,
+        IHttpContextAccessor httpContextAccessor) : IUserService
     {
+
+        public string UserId => httpContextAccessor?
+            .HttpContext?
+            .User?
+            .FindFirst(JwtRegisteredClaimNames.Sub)?
+            .Value ?? string.Empty;
+
         public async Task<Result<RegisteredUserDto>> RegisterUserAsync(RegisterUserDto registerUserDto)
         {
             var user = new ApplicationUser
