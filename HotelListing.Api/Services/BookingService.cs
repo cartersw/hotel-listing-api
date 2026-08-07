@@ -76,8 +76,7 @@ namespace HotelListing.Api.Services
             var overlaps = await context.Bookings.AnyAsync(
                 b => b.HotelId == hotelId
                 && b.Status != BookingStatus.Cancelled
-                && ((createBookingDto.CheckIn < b.CheckOut && createBookingDto.CheckIn > b.CheckIn)
-                || (createBookingDto.CheckOut > b.CheckIn && createBookingDto.CheckOut < b.CheckOut))
+                && createBookingDto.CheckIn < b.CheckOut && createBookingDto.CheckOut > b.CheckIn
                 && b.UserId == userId);
 
             if (overlaps)
@@ -118,6 +117,86 @@ namespace HotelListing.Api.Services
                 );
 
             return Result<GetBookingDto>.Success(created);
+        }
+
+        
+
+        public async Task<Result<GetBookingDto>> UpdateBookingAsync(int hotelId, int bookingId, UpdateBookingDto updateBookingDto)
+        {
+            var userId = httpContextAccessor?
+               .HttpContext?
+               .User?
+               .FindFirst(JwtRegisteredClaimNames.Sub)?
+               .Value;
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Result<GetBookingDto>.Failure(new Error(ErrorCodes.Validation, "Must be logged in to create a booking"));
+            }
+
+            var nights = updateBookingDto.CheckOut.DayNumber - updateBookingDto.CheckIn.DayNumber;
+
+            if (nights <= 0)
+            {
+                return Result<GetBookingDto>.Failure(new Error(ErrorCodes.Validation, "Check-out must be after check-in"));
+            }
+
+            if (updateBookingDto.Guests <= 0)
+            {
+                return Result<GetBookingDto>.Failure(new Error(ErrorCodes.Validation, "Booking requires at least 1 guest"));
+            }
+
+            var overlaps = await context.Bookings.AnyAsync(
+                b => b.HotelId == hotelId
+                && b.Status != BookingStatus.Cancelled
+                && updateBookingDto.CheckIn < b.CheckOut && updateBookingDto.CheckOut > b.CheckIn
+                && b.UserId == userId
+                && b.Id != bookingId);
+
+            if (overlaps)
+            {
+                return Result<GetBookingDto>.Failure(new Error(ErrorCodes.Validation, "Booking overlaps with another booking by the same user"));
+            }
+
+            var booking = await context.Bookings.FirstOrDefaultAsync(b => 
+                b.Id == bookingId
+                && b.UserId == userId);
+
+            if(booking == null)
+            {
+                return Result<GetBookingDto>.Failure(new Error(ErrorCodes.NotFound, "Booking does not exist"));
+            }
+
+            if(booking.Status == BookingStatus.Cancelled)
+            {
+                return Result<GetBookingDto>.Failure(new Error(ErrorCodes.Conflict, "Cancelled bookings can not be modified"));
+            }
+
+            var perNight = booking.Hotel!.NightlyRate;
+
+            booking.CheckIn = updateBookingDto.CheckIn;
+            booking.CheckOut = updateBookingDto.CheckOut;
+            booking.Guests = updateBookingDto.Guests;
+            booking.TotalPrice = perNight * (updateBookingDto.CheckOut.DayNumber - updateBookingDto.CheckIn.DayNumber);
+            booking.UpdatedAtUtc = DateTime.UtcNow;
+
+            await context.SaveChangesAsync();
+
+            var updated = new GetBookingDto(
+                booking.Id,
+                booking.HotelId,
+                booking.Hotel!.Name,
+                booking.CheckIn,
+                booking.CheckOut,
+                booking.Guests,
+                booking.TotalPrice,
+                booking.Status.ToString(),
+                booking.CreatedAtUtc,
+                booking.UpdatedAtUtc
+                );
+
+            return Result<GetBookingDto>.Success(updated);
+            
         }
     }
 

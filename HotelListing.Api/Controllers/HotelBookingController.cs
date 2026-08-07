@@ -25,6 +25,18 @@ namespace HotelListing.Api.Controllers
             return ToActionResult(result);
         }
 
+        [HttpPut("{bookingId:int}")]
+        public async Task<ActionResult<GetBookingDto>> UpdateBooking(
+            [FromRoute] int hotelId, 
+            [FromRoute] int bookingId, 
+            [FromBody] UpdateBookingDto 
+            updateBookingDto)
+        {
+            var result = await bookingService.UpdateBookingAsync(hotelId, bookingId, updateBookingDto);
 
+            return ToActionResult(result);
+        }
+
+        
     }
 }

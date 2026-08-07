@@ -2,9 +2,8 @@
 {
     public class UpdateBookingDto
     {
-        DateOnly Checkin { get; set; }
-        DateOnly CheckOut { get; set; }
-        int Guests { get; set; }
-        
+        public DateOnly CheckIn { get; set; }
+        public DateOnly CheckOut { get; set; }
+        public int Guests { get; set; }
     }
 }
