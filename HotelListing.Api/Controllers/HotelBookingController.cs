@@ -20,7 +20,9 @@ namespace HotelListing.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<GetBookingDto>> CreateBooking([FromRoute] int hotelId, [FromBody] CreateBookingDto createBookingDto)
         {
-            throw new NotImplementedException();
+            var result = await bookingService.CreateBookingAsync(hotelId, createBookingDto);
+
+            return ToActionResult(result);
         }
 
 
