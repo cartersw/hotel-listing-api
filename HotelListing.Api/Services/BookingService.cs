@@ -11,7 +11,7 @@ namespace HotelListing.Api.Services
 {
     public class BookingService(HotelListingDbContext context, IUserService userService) : IBookingService
     {
-        public async Task<Result<IEnumerable<GetBookingDto>>> GetBookingsAsync(int hotelId)
+        public async Task<Result<IEnumerable<GetBookingDto>>> GetBookingsHotelAsync(int hotelId)
         {
 
             var hotel = await context.Hotels.FindAsync(hotelId);
@@ -24,6 +24,37 @@ namespace HotelListing.Api.Services
 
             var bookings = await context.Bookings
                 .Where(b => b.HotelId == hotelId)
+                .OrderBy(b => b.CheckIn)
+                .Select(b => new GetBookingDto(
+                    b.Id,
+                    b.HotelId,
+                    b.Hotel!.Name,
+                    b.CheckIn,
+                    b.CheckOut,
+                    b.Guests,
+                    b.TotalPrice,
+                    b.Status.ToString(),
+                    b.CreatedAtUtc,
+                    b.UpdatedAtUtc))
+                .ToListAsync();
+
+            return Result<IEnumerable<GetBookingDto>>.Success(bookings);
+        }
+
+        public async Task<Result<IEnumerable<GetBookingDto>>> GetBookingsUserAsync(int hotelId)
+        {
+
+            var hotel = await context.Hotels.FindAsync(hotelId);
+
+            if (hotel == null)
+            {
+                return Result<IEnumerable<GetBookingDto>>.Failure(new Error(ErrorCodes.NotFound, "Hotel with Id " + hotelId + " was not found"));
+            }
+
+            var userId = userService.UserId;
+
+            var bookings = await context.Bookings
+                .Where(b => b.HotelId == hotelId && b.UserId == userId)
                 .OrderBy(b => b.CheckIn)
                 .Select(b => new GetBookingDto(
                     b.Id,

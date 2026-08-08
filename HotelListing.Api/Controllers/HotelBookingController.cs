@@ -12,9 +12,17 @@ namespace HotelListing.Api.Controllers
     {
         [HttpGet]
         [Authorize(Roles = "Hotel Admin, Administrator")]
-        public async Task<ActionResult<IEnumerable<GetBookingDto>>> GetBookings([FromRoute]int hotelId)
+        public async Task<ActionResult<IEnumerable<GetBookingDto>>> GetBookingsHotel([FromRoute]int hotelId)
         {
-            var result = await bookingService.GetBookingsAsync(hotelId);
+            var result = await bookingService.GetBookingsHotelAsync(hotelId);
+
+            return ToActionResult(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GetBookingDto>>> GetBookingsUser([FromRoute]int hotelId)
+        {
+            var result = await bookingService.GetBookingsUserAsync(hotelId);
 
             return ToActionResult(result);
         }
