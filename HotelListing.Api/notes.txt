@@ -28,10 +28,15 @@ api/hotels/{hotelid}/bookings
 instead of
 api/bookings
 
+policy = list of rules needed to pass
+requirement = singular rule
+handler = code that evaluates whether the rule passes given context
 
 --TODO
 Implement DB Api key creation
 Implement DB Api key checking in apikeyvalidatorservice
+
+
 
 
 
