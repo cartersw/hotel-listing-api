@@ -28,7 +28,7 @@ namespace HotelListing.Api.Controllers
             return ToActionResult(result);
         }
 
-        [HttpGet]
+        [HttpGet("me")]
         public async Task<ActionResult<IEnumerable<GetBookingDto>>> GetBookingsUser([FromRoute]int hotelId)
         { 
             var result = await bookingService.GetBookingsUserAsync(hotelId);
