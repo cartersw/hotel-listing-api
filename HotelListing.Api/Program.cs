@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using HotelListing.Api.Authorization.Handlers;
+using Microsoft.AspNetCore.Authorization;
+using HotelListing.Api.Authorization.Requirements;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +45,17 @@ builder.Services.AddAuthentication(options =>
     .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(AuthenticationDefaults.ApiKeyScheme, options => { });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ManageHotel", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.Requirements.Add(new ManageHotelRequirement());
+    });
+});
+
+builder.Services.AddScoped<IAuthorizationHandler, ManageHotelAuthorizationHandler>();
 
 builder.Services.AddHttpContextAccessor();
 
