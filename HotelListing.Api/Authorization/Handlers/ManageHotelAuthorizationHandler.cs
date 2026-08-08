@@ -7,13 +7,13 @@ using System.Security.Claims;
 namespace HotelListing.Api.Authorization.Handlers
 {
     public class ManageHotelAuthorizationHandler(HotelListingDbContext dbContext) 
-        : AuthorizationHandler<ManageHotelRequirement, Hotel>
+        : AuthorizationHandler<ManageHotelRequirement, int>
     {
       
         protected override async Task HandleRequirementAsync(
             AuthorizationHandlerContext authContext, 
             ManageHotelRequirement requirement, 
-            Hotel resource)
+            int hotelId)
         {
             if (authContext.User.IsInRole("Administrator"))
             {
@@ -31,7 +31,7 @@ namespace HotelListing.Api.Authorization.Handlers
             }
 
             var managesHotel = await dbContext.HotelAdmins.AnyAsync(ha =>
-            ha.UserId == userId && ha.HotelId == resource.Id);
+            ha.UserId == userId && ha.HotelId == hotelId);
 
             if (managesHotel)
             {

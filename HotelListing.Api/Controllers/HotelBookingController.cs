@@ -8,12 +8,21 @@ namespace HotelListing.Api.Controllers
     [Route("api/hotels/{hotelId:int}/bookings")]
     [ApiController]
     [Authorize]
-    public class HotelBookingController(IBookingService bookingService) : ApiControllerBase
+    public class HotelBookingController(IBookingService bookingService, IAuthorizationService authorizationService) : ApiControllerBase
     {
         [HttpGet]
-        [Authorize(Roles = "Hotel Admin, Administrator")]
         public async Task<ActionResult<IEnumerable<GetBookingDto>>> GetBookingsHotel([FromRoute]int hotelId)
         {
+            var authResult = await authorizationService.AuthorizeAsync(
+                User,
+                hotelId,
+                "ManageHotel");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             var result = await bookingService.GetBookingsHotelAsync(hotelId);
 
             return ToActionResult(result);
@@ -21,7 +30,7 @@ namespace HotelListing.Api.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetBookingDto>>> GetBookingsUser([FromRoute]int hotelId)
-        {
+        { 
             var result = await bookingService.GetBookingsUserAsync(hotelId);
 
             return ToActionResult(result);
