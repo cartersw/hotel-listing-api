@@ -1,12 +1,14 @@
-﻿using HotelListing.Api.Contracts;
+﻿using HotelListing.Api.Constants;
+using HotelListing.Api.Contracts;
 using HotelListing.Api.Data;
 using HotelListing.Api.DTOs.Hotel;
 using HotelListing.Api.Results;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing.Api.Services
 {
-    public class HotelService(HotelListingDbContext context) : IHotelService
+    public class HotelService(HotelListingDbContext context, UserManager<ApplicationUser> userManager) : IHotelService
     {
         public async Task<Result<IEnumerable<GetHotelDto>>> GetHotelsAsync()
         {
@@ -129,6 +131,42 @@ namespace HotelListing.Api.Services
             return Result.Success();
         }
 
+        public async Task<Result> AddHotelAdminAsync(int hotelId, string userId)
+        {
+             
+            if (!HotelExists(hotelId))
+            {
+                return Result.Failure(new Error(ErrorCodes.NotFound, "Hotel does not exist"));
+            }
+
+            var user = await userManager.FindByIdAsync(userId);
+
+            if(user == null)
+            {
+                return Result.Failure(new Error(ErrorCodes.NotFound, "User does not exist"));
+            }
+
+            var isAdmin = await context.HotelAdmins.AnyAsync(q => q.UserId == userId && q.HotelId == hotelId);
+
+            if (isAdmin)
+            {
+                return Result.Failure(new Error(ErrorCodes.NotFound, "User is already an admin for this hotel"));
+            }
+
+            var hotelAdmin = new HotelAdmin
+            {
+                HotelId = hotelId,
+                UserId = userId
+            };
+
+            context.HotelAdmins.Add(hotelAdmin);
+            await context.SaveChangesAsync();
+
+            return Result.Success();
+
+
+        }
+
 
         public bool HotelExists(int id)
         {
@@ -140,8 +178,6 @@ namespace HotelListing.Api.Services
             return context.Hotels.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim()); ;
         }
 
-
-
-
+        
     }
 }
