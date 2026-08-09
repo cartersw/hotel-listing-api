@@ -73,6 +73,16 @@ namespace HotelListing.Api.Controllers
             [FromRoute] int hotelId,
             [FromRoute] int bookingId)
         {
+            var authResult = await authorizationService.AuthorizeAsync(
+                User,
+                hotelId,
+                "ManageHotel");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             var result = await bookingService.AdminCancelBookingAsync(hotelId, bookingId);
 
             return ToActionResult(result);
@@ -84,6 +94,16 @@ namespace HotelListing.Api.Controllers
             [FromRoute] int hotelId,
             [FromRoute] int bookingId)
         {
+            var authResult = await authorizationService.AuthorizeAsync(
+                User,
+                hotelId,
+                "ManageHotel");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             var result = await bookingService.AdminConfirmBookingAsync(hotelId, bookingId);
 
             return ToActionResult(result);
