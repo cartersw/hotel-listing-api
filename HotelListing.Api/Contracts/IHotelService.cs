@@ -5,7 +5,7 @@ namespace HotelListing.Api.Contracts
 {
     public interface IHotelService
     {
-        Task<Result> AddHotelAdminAsync(int hotelId, string userId);
+        Task<Result> AddHotelAdminAsync(int hotelId, AddHotelAdminDto addHotelAdminDto);
         Task<Result<GetHotelDetailsDto>> CreateHotelAsync(CreateHotelDto hotelDto);
         Task<Result> DeleteHotel(int id);
         Task<Result<GetHotelDetailsDto>> GetHotelAsync(int id);

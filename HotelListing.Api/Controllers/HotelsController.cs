@@ -80,9 +80,9 @@ public class HotelsController : ApiControllerBase
 
     [HttpPost("{hotelId:int}/admins")]
     [Authorize(Roles = "Administrator")]
-    public async Task<IActionResult> AddHotelAdmin([FromRoute] int hotelId, [FromBody] string userId)
+    public async Task<IActionResult> AddHotelAdmin([FromRoute] int hotelId, AddHotelAdminDto addHotelAdminDto)
     {
-        var result = await _hotelService.AddHotelAdminAsync(hotelId, userId);
+        var result = await _hotelService.AddHotelAdminAsync(hotelId, addHotelAdminDto);
 
         return ToActionResult(result);
     }

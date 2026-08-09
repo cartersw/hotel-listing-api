@@ -131,7 +131,7 @@ namespace HotelListing.Api.Services
             return Result.Success();
         }
 
-        public async Task<Result> AddHotelAdminAsync(int hotelId, string userId)
+        public async Task<Result> AddHotelAdminAsync(int hotelId, AddHotelAdminDto addHotelAdminDto)
         {
              
             if (!HotelExists(hotelId))
@@ -139,14 +139,14 @@ namespace HotelListing.Api.Services
                 return Result.Failure(new Error(ErrorCodes.NotFound, "Hotel does not exist"));
             }
 
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(addHotelAdminDto.UserId);
 
             if(user == null)
             {
                 return Result.Failure(new Error(ErrorCodes.NotFound, "User does not exist"));
             }
 
-            var isAdmin = await context.HotelAdmins.AnyAsync(q => q.UserId == userId && q.HotelId == hotelId);
+            var isAdmin = await context.HotelAdmins.AnyAsync(q => q.UserId == addHotelAdminDto.UserId && q.HotelId == hotelId);
 
             if (isAdmin)
             {
@@ -156,7 +156,7 @@ namespace HotelListing.Api.Services
             var hotelAdmin = new HotelAdmin
             {
                 HotelId = hotelId,
-                UserId = userId
+                UserId = addHotelAdminDto.UserId
             };
 
             context.HotelAdmins.Add(hotelAdmin);
