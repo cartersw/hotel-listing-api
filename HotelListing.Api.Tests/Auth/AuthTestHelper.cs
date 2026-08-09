@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net.Http.Json;
 using HotelListing.Api.Tests.DTOs;
+using System.Net.Http.Headers;
 
 
 namespace HotelListing.Api.Tests.Auth
@@ -27,6 +28,11 @@ namespace HotelListing.Api.Tests.Auth
             var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
 
             return loginResponse!.Token;
+        }
+
+        public static async Task AuthenticateAsync(HttpClient client, string token)
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
     }
 }
