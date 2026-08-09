@@ -22,7 +22,8 @@ namespace HotelListing.Api.Services
             .HttpContext?
             .User?
             .FindFirst(JwtRegisteredClaimNames.Sub)?
-            .Value ?? string.Empty;
+            .Value 
+            ??  string.Empty;
 
         public async Task<Result<RegisteredUserDto>> RegisterUserAsync(RegisterUserDto registerUserDto)
         {
