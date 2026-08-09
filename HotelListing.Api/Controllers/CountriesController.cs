@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class CountryController(ICountryService countryService) : ApiControllerBase
+public class CountriesController(ICountryService countryService) : ApiControllerBase
 {
 
     // GET: api/Country

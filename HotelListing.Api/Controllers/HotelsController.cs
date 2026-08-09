@@ -9,10 +9,10 @@ using Microsoft.AspNetCore.Authorization;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class HotelController : ApiControllerBase
+public class HotelsController : ApiControllerBase
 {
     private readonly IHotelService _hotelService;
-    public HotelController(IHotelService hotelService)
+    public HotelsController(IHotelService hotelService)
     {
         _hotelService = hotelService;
     }

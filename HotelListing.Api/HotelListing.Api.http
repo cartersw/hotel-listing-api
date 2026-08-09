@@ -74,14 +74,14 @@ Content-Type: application/json
 ###
 
 GET {{HotelListing.Api_HostAddress}}/api/hotel
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMjk4ZmVjNC04NThjLTRkNTMtOWZjNC1hMGIwN2Y5Y2JiNmIiLCJlbWFpbCI6ImFwcHVzZXJAZXhhbXBsZS5jb20iLCJqdGkiOiI3ZGNiYjVkNy04MTU3LTQ2ZmMtOWI5YS03NjRkYzczOWJjMzAiLCJuYW1lIjoiZ3V5LCByZWd1bGFyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTc4NjI0MTk3MSwiaXNzIjoiSG90ZWxMaXN0aW5nQVBJIiwiYXVkIjoiSG90ZWxMaXN0aW5nQVBJQ2xpZW50In0.MuCP3Gf6zVCySV06xMYeVHaPPeWuCzkDN0dnbsvhVLc
 ###
 
 POST {{HotelListing.Api_HostAddress}}/api/auth/register
 Content-Type: application/json
 
 {
-  "Email": "appuser@example.com",
+  "Email": "hoteladmin1@example.com",
   "FirstName": "regular",
   "LastName": "guy",
   "Password": "Password123!"
@@ -114,4 +114,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMjk4ZmVjN
 ###
 
 
-
+@hotelId=7
+@userId=e11dcc9e-e051-4aee-a9f2-eb32b96f50a1
+POST {{HotelListing.Api_HostAddress}}/api/Hotel/{{hotelId}}/admins?userId={{userId}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMjk4ZmVjNC04NThjLTRkNTMtOWZjNC1hMGIwN2Y5Y2JiNmIiLCJlbWFpbCI6ImFwcHVzZXJAZXhhbXBsZS5jb20iLCJqdGkiOiIwMTkzNjNlYi0wZjNmLTRkOTUtYjhjOC0xMTM4NWI5MzA5ZTIiLCJuYW1lIjoiZ3V5LCByZWd1bGFyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTc4NjE3OTMxMCwiaXNzIjoiSG90ZWxMaXN0aW5nQVBJIiwiYXVkIjoiSG90ZWxMaXN0aW5nQVBJQ2xpZW50In0.2FC69XXAH0CbCix3FwqaVN4RV6qOiNrnSrav0_rJcLY
+###
