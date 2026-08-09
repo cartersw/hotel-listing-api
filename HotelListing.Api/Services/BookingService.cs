@@ -90,10 +90,7 @@ namespace HotelListing.Api.Services
                 return Result<GetBookingDto>.Failure(new Error(ErrorCodes.Validation, "Check-out must be after check-in"));
             }
 
-            if(createBookingDto.Guests <= 0)
-            {
-                return Result<GetBookingDto>.Failure(new Error(ErrorCodes.Validation, "Booking requires at least 1 guest"));
-            }
+
             var hotel = await context.Hotels.FindAsync(hotelId);
 
             if (hotel == null)
@@ -165,10 +162,6 @@ namespace HotelListing.Api.Services
                 return Result<GetBookingDto>.Failure(new Error(ErrorCodes.Validation, "Check-out must be after check-in"));
             }
 
-            if (updateBookingDto.Guests <= 0)
-            {
-                return Result<GetBookingDto>.Failure(new Error(ErrorCodes.Validation, "Booking requires at least 1 guest"));
-            }
 
             var overlaps = await context.Bookings.AnyAsync(
                 b => b.HotelId == hotelId

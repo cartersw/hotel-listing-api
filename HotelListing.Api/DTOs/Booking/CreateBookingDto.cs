@@ -12,6 +12,7 @@ namespace HotelListing.Api.DTOs.Booking
         [Required]
         public DateOnly CheckOut { get; set; }
 
+        [Range(1, 10)]
         public int Guests { get; set; }
     
     }
