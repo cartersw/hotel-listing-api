@@ -7,7 +7,7 @@ namespace HotelListing.Api.Contracts
     {
         string UserId { get; }
         Task<Result<RegisteredUserDto>> RegisterUserAsync(RegisterUserDto registerUserDto);
-        Task<Result<string>> LoginUserAsync(LoginUserDto loginUserDto);
         Task<Result> AssignRoleAsync(Guid userId, AssignRoleDto assignRoleDto);
+        Task<Result<LoggedInUserDto>> LoginUserAsync(LoginUserDto loginUserDto);
     }
 }

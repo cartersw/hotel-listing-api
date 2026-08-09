@@ -30,7 +30,7 @@ namespace HotelListing.Api.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<string>> Login(LoginUserDto loginUserDto)
+        public async Task<ActionResult<LoggedInUserDto>> Login(LoginUserDto loginUserDto)
         {
             var result = await userService.LoginUserAsync(loginUserDto);
 

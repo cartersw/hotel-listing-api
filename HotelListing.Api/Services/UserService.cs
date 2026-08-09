@@ -57,25 +57,30 @@ namespace HotelListing.Api.Services
         }
 
         [HttpPost("login")]
-        public async Task<Result<string>> LoginUserAsync(LoginUserDto loginUserDto)
+        public async Task<Result<LoggedInUserDto>> LoginUserAsync(LoginUserDto loginUserDto)
         {
             var user = await userManager.FindByEmailAsync(loginUserDto.Email);
 
             if (user == null)
             {
-                return Result<string>.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
+                return Result<LoggedInUserDto>.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
 
             }
 
             var isPasswordValid = await userManager.CheckPasswordAsync(user, loginUserDto.Password);
             if (!isPasswordValid)
             {
-                return Result<string>.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
+                return Result<LoggedInUserDto>.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
             }
 
             var token = await GenerateToken(user);
 
-            return Result<string>.Success(token);
+            var loggedInUserDto = new LoggedInUserDto { 
+                Token  = token
+            };
+
+
+            return Result<LoggedInUserDto>.Success(loggedInUserDto);
         }
 
         public async Task<Result> AssignRoleAsync(Guid userId, AssignRoleDto assignRoleDto)
