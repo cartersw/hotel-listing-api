@@ -22,5 +22,19 @@ namespace HotelListing.Api.Tests.Integration
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
+
+
+        [Fact]
+        public async Task GetBookings_AsHotelAdminForHotel_ReturnsOk()
+        {
+            var token = await AuthTestHelper.LoginAsync(_client, "basictesthoteladmin1@test.com", "TestPassword1!");
+
+            await AuthTestHelper.AuthenticateAsync(_client, token);
+
+            var response = await _client.GetAsync("/api/hotels/1/bookings");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
     }
 }
