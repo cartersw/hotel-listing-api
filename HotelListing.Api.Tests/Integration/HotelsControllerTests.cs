@@ -7,7 +7,7 @@ using System.Text;
 
 namespace HotelListing.Api.Tests.Integration
 {
-    public class HotelsControllerTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
+    public class HotelsControllerTests(CustomWebApplicationFactory factory) : IClassFixture<CustomWebApplicationFactory>
     {
         private readonly HttpClient _client = factory.CreateClient();
 
