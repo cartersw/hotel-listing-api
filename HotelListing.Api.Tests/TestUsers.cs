@@ -12,7 +12,15 @@ namespace HotelListing.Api.Tests
         public const string UserEmail = "user@test.com";
 
 
-        public const string Password = "TEST_PASSWORD";
+        public const string AdminUserName = "admin";
+        public const string ManagerOneUserName = "manager1";
+        public const string ManagerTwoUserName = "manager2";
+        public const string UserUserName = "user";
+
+
+
+
+        public const string Password = "Test_PASSWORD1!";
 
     }
 
@@ -27,5 +35,11 @@ namespace HotelListing.Api.Tests
     public static class TestCountries
     {
         public const int CountryOneId = 1001;
+    }
+
+    public static class RoleNames
+    {
+        public const string Admin = "Administrator";
+        public const string User = "User";
     }
 }

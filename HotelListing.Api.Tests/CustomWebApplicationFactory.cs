@@ -57,10 +57,10 @@ namespace HotelListing.Api.Tests
 
             await context.Database.MigrateAsync();
 
-            /*
+            
             await TestDatabaseSeeder.SeedAsync(
                 scope.ServiceProvider);
-            */
+            
 
         }
 

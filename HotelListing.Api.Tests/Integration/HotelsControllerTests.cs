@@ -14,7 +14,7 @@ namespace HotelListing.Api.Tests.Integration
         [Fact]
         public async Task GetHotels_WhenAuthenticated_ReturnsOk()
         {
-            var token = await AuthTestHelper.LoginAsync(_client, "basictestuser@test.com", "TestPassword1!");
+            var token = await AuthTestHelper.LoginAsync(_client, TestUsers.UserEmail, TestUsers.Password);
 
             await AuthTestHelper.AuthenticateAsync(_client, token);
 
@@ -27,7 +27,7 @@ namespace HotelListing.Api.Tests.Integration
         [Fact]
         public async Task GetBookings_AsHotelAdminForHotel_ReturnsOk()
         {
-            var token = await AuthTestHelper.LoginAsync(_client, "basictesthoteladmin1@test.com", "TestPassword1!");
+            var token = await AuthTestHelper.LoginAsync(_client, TestUsers.ManagerOneEmail, TestUsers.Password);
 
             await AuthTestHelper.AuthenticateAsync(_client, token);
 
