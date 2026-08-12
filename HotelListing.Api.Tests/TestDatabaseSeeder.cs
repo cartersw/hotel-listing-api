@@ -1,5 +1,6 @@
 ﻿using HotelListing.Api.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HotelListing.Api.Tests
@@ -32,9 +33,9 @@ namespace HotelListing.Api.Tests
             UserManager<ApplicationUser> userManager)
         {
 
-
             var admin = new ApplicationUser
             {
+                Id = TestUsers.AdminId,
                 UserName = TestUsers.AdminUserName,
                 FirstName = TestUsers.AdminUserName,
                 LastName = TestUsers.AdminUserName,
@@ -43,6 +44,7 @@ namespace HotelListing.Api.Tests
 
             var hotelAdmin = new ApplicationUser
             {
+                Id = TestUsers.ManagerOneId,
                 UserName = TestUsers.ManagerOneUserName,
                 FirstName = TestUsers.ManagerOneUserName,
                 LastName = TestUsers.ManagerOneUserName,
@@ -51,6 +53,7 @@ namespace HotelListing.Api.Tests
 
             var user = new ApplicationUser
             {
+                Id = TestUsers.UserId,
                 UserName = TestUsers.UserUserName,
                 FirstName = TestUsers.UserUserName,
                 LastName = TestUsers.UserUserName,
@@ -85,6 +88,31 @@ namespace HotelListing.Api.Tests
         private static async Task SeedCountriesAndHotelsAsync(
             HotelListingDbContext context)
         {
+
+            await context.Database.OpenConnectionAsync();
+            try
+            {
+
+                await context.Database.ExecuteSqlRawAsync(
+                "SET IDENTITY_INSERT Countries ON");
+
+                await context.Countries.AddAsync(
+                    new Country
+                    {
+                        CountryId = TestCountries.CountryOneId,
+                        Name = TestCountries.CountryOneName,
+                        ShortName = TestCountries.CountryOneShortName
+                    });
+
+                await context.SaveChangesAsync();
+
+                await context.Database.ExecuteSqlRawAsync(
+                    "SET IDENTITY_INSERT Countries OFF");
+            }
+            finally
+            {
+                await context.Database.CloseConnectionAsync();
+            }
 
         }
 

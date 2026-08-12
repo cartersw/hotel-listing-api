@@ -133,7 +133,6 @@ namespace HotelListing.Api.Services
 
         public async Task<Result> AddHotelAdminAsync(int hotelId, AddHotelAdminDto addHotelAdminDto)
         {
-             
             if (!HotelExists(hotelId))
             {
                 return Result.Failure(new Error(ErrorCodes.NotFound, "Hotel does not exist"));
@@ -163,8 +162,6 @@ namespace HotelListing.Api.Services
             await context.SaveChangesAsync();
 
             return Result.Success();
-
-
         }
 
 
