@@ -18,7 +18,7 @@ namespace HotelListing.Api.Tests
         {
             builder.ConfigureServices((context, services) =>
             {
-                //change connection parameters to test db
+                // change connection parameters to test db
 
                 var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<HotelListingDbContext>));
 
@@ -48,7 +48,7 @@ namespace HotelListing.Api.Tests
 
         public async Task InitializeAsync()
         {
-            //create test db
+            // create test db
 
             using var scope = Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<HotelListingDbContext>();
@@ -67,6 +67,7 @@ namespace HotelListing.Api.Tests
         public Task DisposeAsync()
         {
             // run after test completion
+
             return Task.CompletedTask;
         }
 

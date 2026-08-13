@@ -15,7 +15,7 @@ namespace HotelListing.Api.Tests.Integration
 
 
         [Fact]
-        public async Task CreateHotel_AsAdmin_ReturnsOk()
+        public async Task CreateHotel_AsAdmin_ReturnsCreated()
         {
             var token = await AuthTestHelper.LoginAsync(_client, TestUsers.AdminEmail, TestUsers.Password);
 
@@ -46,8 +46,10 @@ namespace HotelListing.Api.Tests.Integration
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
+        //need to create a hotel during seeding 
+
         [Fact]
-        public async Task GiveManagerOne_HotelAdminForOne_ReturnsOk()
+        public async Task GiveManagerOne_HotelAdminForOne_ReturnsNoContent()
         {
             var token = await AuthTestHelper.LoginAsync(_client, TestUsers.AdminEmail, TestUsers.Password);
 
@@ -58,9 +60,9 @@ namespace HotelListing.Api.Tests.Integration
                 UserId = TestUsers.ManagerOneId
             };
 
-            var response = await _client.PostAsJsonAsync("/api/hotels/1/admins", addAdminDto);
+            var response = await _client.PostAsJsonAsync("/api/hotels/" + TestHotels.HotelOneId + "/admins", addAdminDto);
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
 
@@ -71,7 +73,7 @@ namespace HotelListing.Api.Tests.Integration
 
             await AuthTestHelper.AuthenticateAsync(_client, token);
 
-            var response = await _client.GetAsync("/api/hotels/1/bookings");
+            var response = await _client.GetAsync("/api/hotels/" + TestHotels.HotelOneId + "/bookings");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }

@@ -108,6 +108,25 @@ namespace HotelListing.Api.Tests
 
                 await context.Database.ExecuteSqlRawAsync(
                     "SET IDENTITY_INSERT Countries OFF");
+
+                await context.Database.ExecuteSqlRawAsync(
+                    "SET IDENTITY_INSERT Hotels ON");
+
+                await context.Hotels.AddAsync(
+                    new Hotel
+                    {
+                        Id = TestHotels.HotelOneId,
+                        Name = TestHotels.HotelOneName,
+                        Address = TestHotels.HotelOneAddress,
+                        Rating = TestHotels.HotelOneRating,
+                        NightlyRate = TestHotels.HotelOneNightlyRate,
+                        CountryId = TestHotels.HotelOneCountryId
+                    });
+
+                await context.SaveChangesAsync();
+
+                await context.Database.ExecuteSqlRawAsync(
+                    "SET IDENTITY_INSERT Hotels OFF");
             }
             finally
             {
