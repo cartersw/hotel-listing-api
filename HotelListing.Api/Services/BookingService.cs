@@ -98,8 +98,8 @@ namespace HotelListing.Api.Services
                 return Result<GetBookingDto>.Failure(new Error(ErrorCodes.NotFound, "Hotel with Id " + hotelId + " was not found"));
             }
 
-            var overlaps = await context.Bookings.AnyAsync(
-                b => b.HotelId == hotelId
+            var overlaps = await context.Bookings.AnyAsync(b => 
+                b.HotelId == hotelId
                 && b.Status != BookingStatus.Cancelled
                 && createBookingDto.CheckIn < b.CheckOut && createBookingDto.CheckOut > b.CheckIn
                 && b.UserId == userId);
@@ -163,8 +163,8 @@ namespace HotelListing.Api.Services
             }
 
 
-            var overlaps = await context.Bookings.AnyAsync(
-                b => b.HotelId == hotelId
+            var overlaps = await context.Bookings.AnyAsync(b => 
+                b.HotelId == hotelId
                 && b.Status != BookingStatus.Cancelled
                 && updateBookingDto.CheckIn < b.CheckOut && updateBookingDto.CheckOut > b.CheckIn
                 && b.UserId == userId

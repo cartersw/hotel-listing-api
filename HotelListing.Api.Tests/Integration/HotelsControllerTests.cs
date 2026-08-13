@@ -46,8 +46,6 @@ namespace HotelListing.Api.Tests.Integration
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-        //need to create a hotel during seeding 
-
         [Fact]
         public async Task GiveManagerOne_HotelAdminForOne_ReturnsNoContent()
         {
