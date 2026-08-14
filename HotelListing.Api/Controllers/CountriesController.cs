@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HotelListing.Api.DTOs.Country;
-using HotelListing.Api.DTOs.Hotel;
-using HotelListing.Api.Contracts;
-using HotelListing.Api.Services;
 using HotelListing.Api.Common.Results;
 using HotelListing.Api.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using HotelListing.Api.Common.Constants;
+using HotelListing.Api.Application.DTOs.Country;
+using HotelListing.Api.Application.Contracts;
 
 
 [Route("api/[controller]")]

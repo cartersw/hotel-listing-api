@@ -1,10 +1,10 @@
 ﻿using HotelListing.Api.Common.Constants;
-using HotelListing.Api.Contracts;
-using HotelListing.Api.DTOs.Auth;
 using HotelListing.Api.Common.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using HotelListing.Api.Application.DTOs.Auth;
+using HotelListing.Api.Application.Contracts;
 
 namespace HotelListing.Api.Controllers
 {

@@ -1,0 +1,13 @@
+﻿namespace HotelListing.Api.Application.DTOs.Hotel
+{
+    public record GetHotelDetailsDto(
+        int Id,
+        string Name,
+        string Address,
+        double Rating,
+        int CountryId
+    );
+    
+
+}
+

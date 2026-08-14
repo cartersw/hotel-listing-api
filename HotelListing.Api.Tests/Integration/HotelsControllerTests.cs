@@ -1,4 +1,4 @@
-﻿using HotelListing.Api.DTOs.Hotel;
+﻿using HotelListing.Api.Application.DTOs.Hotel;
 using HotelListing.Api.Tests.Auth;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System;

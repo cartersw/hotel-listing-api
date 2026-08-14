@@ -1,6 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using HotelListing.Api.Contracts;
-using HotelListing.Api.Services;
 using Microsoft.AspNetCore.Identity;
 using HotelListing.Api.Handler;
 using HotelListing.Api.Common.Constants;
@@ -13,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using HotelListing.Api.Authorization.Requirements;
 using HotelListing.Api.Common.Models;
 using HotelListing.Api.Domain;
+using HotelListing.Api.Application.Services;
+using HotelListing.Api.Application.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
