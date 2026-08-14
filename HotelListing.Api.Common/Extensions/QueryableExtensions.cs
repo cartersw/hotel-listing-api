@@ -13,6 +13,7 @@ namespace HotelListing.Api.Common.Extensions
             PaginationParameters paginationParameters)
         {
             var totalCount = await source.CountAsync();
+
             var items = await source
                 .Skip((paginationParameters.PageNumber - 1) * paginationParameters.PageSize)
                 .Take(paginationParameters.PageSize)
