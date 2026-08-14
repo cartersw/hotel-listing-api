@@ -9,12 +9,14 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HotelListing.Api.Common.Results;
+using Microsoft.Extensions.Options;
+using HotelListing.Api.Common.Models;
 
 namespace HotelListing.Api.Services
 {
     public class UserService(UserManager<ApplicationUser> userManager, 
         RoleManager<IdentityRole> roleManager, 
-        IConfiguration configuration,
+        IOptions<JwtSettings> jwtOptions,
         IHttpContextAccessor httpContextAccessor) : IUserService
     {
 
@@ -125,14 +127,14 @@ namespace HotelListing.Api.Services
 
             claims = claims.Union(roleClaims).ToList();
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: configuration["JwtSettings:Issuer"],
-                audience: configuration["JwtSettings:Audience"],
+                issuer: jwtOptions.Value.Issuer,
+                audience: jwtOptions.Value.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(configuration["JwtSettings:DurationInMinutes"])),
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(jwtOptions.Value.DurationInMinutes)),
                 signingCredentials: credentials
                 );
 
