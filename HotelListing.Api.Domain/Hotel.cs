@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HotelListing.Api.Data;
+namespace HotelListing.Api.Domain;
 
 public class Hotel
 {

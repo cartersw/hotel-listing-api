@@ -1,5 +1,5 @@
 ﻿using HotelListing.Api.Common.Constants;
-using HotelListing.Api.Data;
+using HotelListing.Api.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

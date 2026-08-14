@@ -1,5 +1,4 @@
 ﻿using HotelListing.Api.Common.Constants;
-using HotelListing.Api.Data;
 using HotelListing.Api.DTOs.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +10,7 @@ using System.Text;
 using HotelListing.Api.Common.Results;
 using Microsoft.Extensions.Options;
 using HotelListing.Api.Common.Models;
+using HotelListing.Api.Domain;
 
 namespace HotelListing.Api.Services
 {

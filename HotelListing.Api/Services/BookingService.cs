@@ -1,8 +1,8 @@
 ﻿using HotelListing.Api.Common.Constants;
 using HotelListing.Api.Common.Results;
 using HotelListing.Api.Contracts;
-using HotelListing.Api.Data;
-using HotelListing.Api.Data.Enums;
+using HotelListing.Api.Domain;
+using HotelListing.Api.Domain.Enums;
 using HotelListing.Api.DTOs.Booking;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;

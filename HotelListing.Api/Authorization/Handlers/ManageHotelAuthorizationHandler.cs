@@ -1,6 +1,6 @@
 ﻿using HotelListing.Api.Authorization.Requirements;
 using HotelListing.Api.Common.Constants;
-using HotelListing.Api.Data;
+using HotelListing.Api.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;

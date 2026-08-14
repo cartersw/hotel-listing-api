@@ -1,4 +1,4 @@
-﻿using HotelListing.Api.Data;
+﻿using HotelListing.Api.Domain;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
