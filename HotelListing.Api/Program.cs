@@ -4,7 +4,7 @@ using HotelListing.Api.Contracts;
 using HotelListing.Api.Services;
 using Microsoft.AspNetCore.Identity;
 using HotelListing.Api.Handler;
-using HotelListing.Api.Constants;
+using HotelListing.Api.Common.Constants;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
