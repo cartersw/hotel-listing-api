@@ -6,11 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HotelListing.Api.Common.Results;
 using Microsoft.Extensions.Options;
-using HotelListing.Api.Common.Models;
 using HotelListing.Api.Domain;
 using HotelListing.Api.Application.DTOs.Auth;
 using HotelListing.Api.Application.Contracts;
 using Microsoft.AspNetCore.Http;
+using HotelListing.Api.Common.Models.Config;
 
 namespace HotelListing.Api.Application.Services
 {

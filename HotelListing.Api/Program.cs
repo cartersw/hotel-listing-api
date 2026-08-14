@@ -9,10 +9,10 @@ using System.Text;
 using HotelListing.Api.Authorization.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using HotelListing.Api.Authorization.Requirements;
-using HotelListing.Api.Common.Models;
 using HotelListing.Api.Domain;
 using HotelListing.Api.Application.Services;
 using HotelListing.Api.Application.Contracts;
+using HotelListing.Api.Common.Models.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
