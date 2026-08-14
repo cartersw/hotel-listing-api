@@ -51,7 +51,7 @@ namespace HotelListing.Api.Services
                 LastName = user.LastName
             };
 
-            await userManager.AddToRoleAsync(user, "User");
+            await userManager.AddToRoleAsync(user, RoleNames.User);
 
             return Result<RegisteredUserDto>.Success(registeredUser);
         }

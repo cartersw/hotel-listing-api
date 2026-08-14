@@ -8,6 +8,7 @@ using HotelListing.Api.Services;
 using HotelListing.Api.Common.Results;
 using HotelListing.Api.Controllers;
 using Microsoft.AspNetCore.Authorization;
+using HotelListing.Api.Common.Constants;
 
 
 [Route("api/[controller]")]
@@ -38,7 +39,7 @@ public class CountriesController(ICountryService countryService) : ApiController
     // PUT: api/Country/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{countryId}")]
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = RoleNames.Administrator)]
     public async Task<ActionResult> PutCountry(int countryId, UpdateCountryDto updateDto)
     { 
 
@@ -51,7 +52,7 @@ public class CountriesController(ICountryService countryService) : ApiController
     // POST: api/Country
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = RoleNames.Administrator)]
     public async Task<ActionResult<GetCountryDetailsDto>> PostCountry(CreateCountryDto createDto)
     {
         var result = await countryService.CreateCountryAsync(createDto);
@@ -66,7 +67,7 @@ public class CountriesController(ICountryService countryService) : ApiController
 
     // DELETE: api/Country/5
     [HttpDelete("{countryId}")]
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = RoleNames.Administrator)]
     public async Task<ActionResult> DeleteCountry(int? countryId) 
     { 
     

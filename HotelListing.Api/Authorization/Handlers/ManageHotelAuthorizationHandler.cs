@@ -1,4 +1,5 @@
 ﻿using HotelListing.Api.Authorization.Requirements;
+using HotelListing.Api.Common.Constants;
 using HotelListing.Api.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ namespace HotelListing.Api.Authorization.Handlers
             ManageHotelRequirement requirement, 
             int hotelId)
         {
-            if (authContext.User.IsInRole("Administrator"))
+            if (authContext.User.IsInRole(RoleNames.Administrator))
             {
                 authContext.Succeed(requirement);
                 return;
