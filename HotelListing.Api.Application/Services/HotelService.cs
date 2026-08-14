@@ -1,6 +1,8 @@
 ﻿using HotelListing.Api.Application.Contracts;
 using HotelListing.Api.Application.DTOs.Hotel;
 using HotelListing.Api.Common.Constants;
+using HotelListing.Api.Common.Extensions;
+using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Common.Results;
 using HotelListing.Api.Domain;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +12,7 @@ namespace HotelListing.Api.Application.Services
 {
     public class HotelService(HotelListingDbContext context, UserManager<ApplicationUser> userManager) : IHotelService
     {
-        public async Task<Result<IEnumerable<GetHotelDto>>> GetHotelsAsync()
+        public async Task<Result<PagedResult<GetHotelDto>>> GetHotelsAsync(PaginationParameters paginationParameters)
         {
             var hotels = await context.Hotels.Select(h => new GetHotelDto(
                 h.Id,
@@ -18,9 +20,9 @@ namespace HotelListing.Api.Application.Services
                 h.Address,
                 h.Rating,
                 h.Country!.Name
-            )).ToListAsync();
+            )).ToPagedResultAsync(paginationParameters);
 
-            return Result<IEnumerable<GetHotelDto>>.Success(hotels);
+            return Result<PagedResult<GetHotelDto>>.Success(hotels);
         }
         public async Task<Result<GetHotelDetailsDto>> GetHotelAsync(int id)
         {
