@@ -1,6 +1,7 @@
 ﻿using HotelListing.Api.Application.DTOs.Hotel;
 using HotelListing.Api.Tests.Auth;
 using HotelListing.Api.Tests.Integration.Config;
+using HotelListing.Api.Tests.Models;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -26,12 +27,14 @@ namespace HotelListing.Api.Tests.Integration
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var hotels = await response.Content
-                .ReadFromJsonAsync<List<GetHotelDetailsDto>>();
+            var wrapper = await response.Content
+                .ReadFromJsonAsync<PagedApiResponse<List<GetHotelDetailsDto>>>();
 
-            Assert.NotNull(hotels);
+            Assert.NotNull(wrapper);
 
-            Assert.NotEmpty(hotels);
+            Assert.NotNull(wrapper.Data);
+
+            Assert.NotEmpty(wrapper.Data);
 
         }
 
