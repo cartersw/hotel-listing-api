@@ -1,9 +1,9 @@
 ﻿using HotelListing.Api.Common.Constants;
+using HotelListing.Api.Common.Results;
 using HotelListing.Api.Contracts;
 using HotelListing.Api.Data;
 using HotelListing.Api.Data.Enums;
 using HotelListing.Api.DTOs.Booking;
-using HotelListing.Api.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;

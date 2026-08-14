@@ -5,7 +5,7 @@ using HotelListing.Api.DTOs.Country;
 using HotelListing.Api.DTOs.Hotel;
 using HotelListing.Api.Contracts;
 using HotelListing.Api.Services;
-using HotelListing.Api.Results;
+using HotelListing.Api.Common.Results;
 using HotelListing.Api.Controllers;
 using Microsoft.AspNetCore.Authorization;
 
