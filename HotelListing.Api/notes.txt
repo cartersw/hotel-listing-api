@@ -32,6 +32,11 @@ policy = list of rules needed to pass
 requirement = singular rule
 handler = code that evaluates whether the rule passes given context
 
+dotnet ef migrations add [migration name] --project HotelListing.Api.Domain --startup-project HotelListing.Api 
+dotnet ef database update --project HotelListing.Api.Domain --startup-project HotelListing.Api
+
+optionally you can add --context HotelListingDbContext
+
 --TODO
 Implement DB Api key creation
 Implement DB Api key checking in apikeyvalidatorservice
