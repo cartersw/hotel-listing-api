@@ -1,5 +1,6 @@
 ﻿using HotelListing.Api.Application.DTOs.Hotel;
 using HotelListing.Api.Tests.Auth;
+using HotelListing.Api.Tests.Integration.Config;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,8 @@ using System.Text;
 
 namespace HotelListing.Api.Tests.Integration
 {
-    public class HotelsControllerTests(CustomWebApplicationFactory factory) : IClassFixture<CustomWebApplicationFactory>
+    [Collection("Integration Tests")]
+    public class HotelsControllerTests(CustomWebApplicationFactory factory) 
     {
         private readonly HttpClient _client = factory.CreateClient();
 
