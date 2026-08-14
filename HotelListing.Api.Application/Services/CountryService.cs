@@ -1,6 +1,8 @@
 ﻿using HotelListing.Api.Application.Contracts;
 using HotelListing.Api.Application.DTOs.Country;
 using HotelListing.Api.Application.DTOs.Hotel;
+using HotelListing.Api.Common.Extensions;
+using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Common.Results;
 using HotelListing.Api.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +42,23 @@ namespace HotelListing.Api.Application.Services
             
             return country != null ? Result<GetCountryDetailsDto>.Success(country) : Result<GetCountryDetailsDto>.NotFound();
         }
-        
+
+        public async Task<Result<PagedResult<GetHotelDetailsDto>>> GetCountryHotelsAsync(int countryId, 
+            PaginationParameters paginationParameters)
+        {
+            var hotels = await context.Hotels
+                .Where(h => h.CountryId == countryId)
+                .Select(h => new GetHotelDetailsDto(
+                h.Id,
+                h.Name,
+                h.Address,
+                h.Rating,
+                h.CountryId
+            )).ToPagedResultAsync(paginationParameters);
+
+            return Result<PagedResult<GetHotelDetailsDto>>.Success(hotels);
+        }
+
 
         public async Task<Result> UpdateCountryAsync(int countryId, UpdateCountryDto countryDto)
         {
@@ -131,6 +149,6 @@ namespace HotelListing.Api.Application.Services
             return await context.Countries.AnyAsync(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
         }
 
-
+        
     }
 }

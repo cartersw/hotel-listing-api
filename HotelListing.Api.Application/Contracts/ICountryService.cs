@@ -1,4 +1,6 @@
 ﻿using HotelListing.Api.Application.DTOs.Country;
+using HotelListing.Api.Application.DTOs.Hotel;
+using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Common.Results;
 
 namespace HotelListing.Api.Application.Contracts
@@ -10,6 +12,7 @@ namespace HotelListing.Api.Application.Contracts
         Task<Result> DeleteCountryAsync(int? countryId);
         Task<Result<IEnumerable<GetCountryDto>>> GetCountriesAsync();
         Task<Result<GetCountryDetailsDto>> GetCountryAsync(int countryId);
+        Task<Result<PagedResult<GetHotelDetailsDto>>> GetCountryHotelsAsync(int countryId, PaginationParameters paginationParameters);
         Task<Result> UpdateCountryAsync(int countryId, UpdateCountryDto countryDto);
     }
 }
