@@ -1,4 +1,5 @@
-﻿using HotelListing.Api.Data;
+﻿using HotelListing.Api.Common.Constants;
+using HotelListing.Api.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,7 +64,7 @@ namespace HotelListing.Api.Tests
             var results = new[]
             {
                 await userManager.CreateAsync(admin, TestUsers.Password),
-                await userManager.AddToRolesAsync(admin, new string[] { RoleNames.Admin, RoleNames.User }),
+                await userManager.AddToRolesAsync(admin, new string[] { RoleNames.Administrator, RoleNames.User }),
 
                 await userManager.CreateAsync(hotelAdmin, TestUsers.Password),
                 await userManager.AddToRoleAsync(hotelAdmin, RoleNames.User),
