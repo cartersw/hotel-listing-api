@@ -1,11 +1,13 @@
 ﻿using HotelListing.Api.Application.Contracts;
 using HotelListing.Api.Application.DTOs.Country;
 using HotelListing.Api.Application.DTOs.Hotel;
+using HotelListing.Api.Common.Constants;
 using HotelListing.Api.Common.Extensions;
 using HotelListing.Api.Common.Models.Filtering;
 using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Common.Results;
 using HotelListing.Api.Domain;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Metrics;
 namespace HotelListing.Api.Application.Services
@@ -149,6 +151,45 @@ namespace HotelListing.Api.Application.Services
 
             context.Countries.Remove(country);
             await context.SaveChangesAsync();
+            return Result.Success();
+        }
+
+        public async Task<Result> PatchCountryAsync(int countryId, JsonPatchDocument<UpdateCountryDto> patchDoc)
+        {
+            var country = await context.Countries.FindAsync(countryId);
+            if (country == null)
+            {
+                return Result.Failure(new Error(ErrorCodes.NotFound, "Country with Id" + countryId + "was not found"));
+            }
+
+            var countryDto = new UpdateCountryDto
+            {
+                CountryId = country.CountryId,
+                Name = country.Name,
+                ShortName = country.ShortName
+            };
+
+            patchDoc.ApplyTo(countryDto);
+
+            if (countryDto.CountryId != countryId)
+            {
+                return Result.Failure(new Error(ErrorCodes.Validation, "Cannot modify Id field"));
+            }
+
+            var duplicateExists = await context.Countries
+                .AnyAsync(c => c.Name.ToLower().Trim() == countryDto.Name.ToLower().Trim()
+                && c.CountryId != countryId);
+
+            if (duplicateExists)
+            {
+                return Result.Failure(new Error(ErrorCodes.Conflict, "Country with name" + countryDto.Name + "already exists"));
+            }
+
+            country.Name = countryDto.Name;
+            country.ShortName = countryDto.ShortName;
+
+            await context.SaveChangesAsync();
+
             return Result.Success();
         }
 
