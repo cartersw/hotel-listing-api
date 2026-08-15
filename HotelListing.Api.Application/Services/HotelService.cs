@@ -14,11 +14,51 @@ namespace HotelListing.Api.Application.Services
     public class HotelService(HotelListingDbContext context, UserManager<ApplicationUser> userManager) : IHotelService
     {
         public async Task<Result<PagedResult<GetHotelDto>>> GetHotelsAsync(PaginationParameters paginationParameters,
-            HotelFilterParameters hotelFilterParameters)
+            HotelFilterParameters filters)
         {
+            var query = context.Hotels.AsQueryable();
+
+            if (filters.CountryId.HasValue)
+            {
+                query = query.Where(q => q.CountryId == filters.CountryId);
+            }
+            if (filters.MinRating.HasValue)
+            {
+                query = query.Where(h => h.Rating >= filters.MinRating.Value);
+            }
+            if (filters.MinPrice.HasValue)
+            {
+                query = query.Where(h => h.NightlyRate >= filters.MinPrice.Value);
+            }
+            if (filters.MaxPrice.HasValue)
+            {
+                query = query.Where(h => h.NightlyRate <= filters.MaxPrice.Value);
+            }
+            if (!string.IsNullOrWhiteSpace(filters.Location))
+            {
+                query = query.Where(h => h.Address.Contains(filters.Location));
+            }
+            if (!string.IsNullOrWhiteSpace(filters.Search))
+            {
+                query = query.Where(h => h.Name.Contains(filters.Search) || h.Address.Contains(filters.Search));
+            }
+
+            query = filters.SortBy?.ToLower() switch
+            {
+                "name" => filters.SortDescending ?
+                    query.OrderByDescending(h => h.Name) : query.OrderBy(h => h.Name),
+
+                "rating" => filters.SortDescending ?
+                    query.OrderByDescending(h => h.Rating) : query.OrderBy(h => h.Rating),
+
+                "price" => filters.SortDescending ?
+                    query.OrderByDescending(h => h.NightlyRate) : query.OrderBy(h => h.NightlyRate),
+
+                _ => query.OrderBy(h => h.Name)
+            };
 
 
-            var hotels = await context.Hotels.Select(h => new GetHotelDto(
+            var hotels = await query.Select(h => new GetHotelDto(
                 h.Id,
                 h.Name,
                 h.Address,
