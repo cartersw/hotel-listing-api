@@ -10,4 +10,5 @@ namespace HotelListing.Api.Common.Models.Filtering
         public string? SortBy { get; set; }
         public bool SortDescending { get; set; } = false;
     }
+
 }
