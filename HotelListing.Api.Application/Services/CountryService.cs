@@ -25,7 +25,7 @@ namespace HotelListing.Api.Application.Services
 
             if (!string.IsNullOrWhiteSpace(filters.Search))
             {
-                query = query.Where(c => c.Name.Contains(filters.Search));
+                query = query.Where(c => c.Name.Contains(filters.Search) || c.ShortName.Contains(filters.Search));
             }
 
             var countries = await query.Select(c => new GetCountryDto(
