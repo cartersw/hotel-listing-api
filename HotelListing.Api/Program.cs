@@ -20,13 +20,31 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("HotelListingDbConnectionString");
 
 
-if (!builder.Environment.IsEnvironment("Development"))
+if (!builder.Environment.IsEnvironment("Testing"))
 {
     builder.Services.AddDbContextPool<HotelListingDbContext>(options =>
-    options.UseSqlServer(
-        connectionString,
-        sqlOptions =>
-            sqlOptions.MigrationsAssembly("HotelListing.Api.Domain")), poolSize: 128);
+    {
+        options.UseSqlServer(connectionString, sqlOptions =>
+        {
+            sqlOptions.MigrationsAssembly("HotelListing.Api.Domain");
+            sqlOptions.CommandTimeout(30);
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 3,
+                maxRetryDelay: TimeSpan.FromSeconds(5),
+                errorNumbersToAdd: null
+                );
+        });
+        if (builder.Environment.IsDevelopment())
+        {
+            options.EnableSensitiveDataLogging();
+            options.EnableDetailedErrors();
+        }
+        
+    }, poolSize: 128);
+}
+else
+{
+    builder.Configuration.AddUserSecrets<Program>();
 }
 
 

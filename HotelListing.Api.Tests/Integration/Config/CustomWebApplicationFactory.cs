@@ -18,8 +18,9 @@ namespace HotelListing.Api.Tests.Integration.Config
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.UseEnvironment("Testing");
 
-        
+
             builder.ConfigureServices((context, services) =>
             {
                 // change connection parameters to test db
