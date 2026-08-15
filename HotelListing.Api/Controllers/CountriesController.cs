@@ -8,6 +8,7 @@ using HotelListing.Api.Application.DTOs.Country;
 using HotelListing.Api.Application.Contracts;
 using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Application.DTOs.Hotel;
+using HotelListing.Api.Common.Models.Filtering;
 
 
 [Route("api/[controller]")]
@@ -19,9 +20,9 @@ public class CountriesController(ICountryService countryService) : ApiController
     // GET: api/Country
     [HttpGet]
     
-    public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountry()
+    public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountry(CountryFilterParameters countryFilterParameters)
     {
-        var result = await countryService.GetCountriesAsync();
+        var result = await countryService.GetCountriesAsync(countryFilterParameters);
 
         return ToActionResult(result);
     }

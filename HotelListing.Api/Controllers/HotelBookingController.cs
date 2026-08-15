@@ -1,5 +1,6 @@
 ﻿using HotelListing.Api.Application.Contracts;
 using HotelListing.Api.Application.DTOs.Booking;
+using HotelListing.Api.Common.Models.Filtering;
 using HotelListing.Api.Common.Models.Paging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,8 @@ namespace HotelListing.Api.Controllers
     {
         [HttpGet]
         public async Task<ActionResult<PagedResult<GetBookingDto>>> GetBookingsHotel([FromRoute]int hotelId, 
-            [FromQuery] PaginationParameters paginationParameters)
+            [FromQuery] PaginationParameters paginationParameters,
+            [FromQuery] BookingFilterParameters bookingFilterParameters)
         {
             var authResult = await authorizationService.AuthorizeAsync(
                 User,
@@ -25,16 +27,17 @@ namespace HotelListing.Api.Controllers
                 return Forbid();
             }
 
-            var result = await bookingService.GetBookingsHotelAsync(hotelId, paginationParameters);
+            var result = await bookingService.GetBookingsHotelAsync(hotelId, paginationParameters, bookingFilterParameters);
 
             return ToActionResult(result);
         }
 
         [HttpGet("me")]
         public async Task<ActionResult<PagedResult<GetBookingDto>>> GetBookingsUser([FromRoute]int hotelId,
-            [FromQuery] PaginationParameters paginationParameters)
+            [FromQuery] PaginationParameters paginationParameters,
+            [FromQuery] BookingFilterParameters bookingFilterParameters)
         { 
-            var result = await bookingService.GetBookingsUserAsync(hotelId, paginationParameters);
+            var result = await bookingService.GetBookingsUserAsync(hotelId, paginationParameters, bookingFilterParameters);
 
             return ToActionResult(result);
         }

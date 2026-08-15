@@ -2,6 +2,7 @@
 using HotelListing.Api.Application.DTOs.Country;
 using HotelListing.Api.Application.DTOs.Hotel;
 using HotelListing.Api.Common.Extensions;
+using HotelListing.Api.Common.Models.Filtering;
 using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Common.Results;
 using HotelListing.Api.Domain;
@@ -11,7 +12,7 @@ namespace HotelListing.Api.Application.Services
 {
     public class CountryService(HotelListingDbContext context) : ICountryService
     {
-        public async Task<Result<IEnumerable<GetCountryDto>>> GetCountriesAsync()
+        public async Task<Result<IEnumerable<GetCountryDto>>> GetCountriesAsync(CountryFilterParameters countryFilterParameters)
         {
 
             var countries = await context.Countries.Select(c => new GetCountryDto(

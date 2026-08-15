@@ -2,6 +2,7 @@
 using HotelListing.Api.Application.DTOs.Hotel;
 using HotelListing.Api.Common.Constants;
 using HotelListing.Api.Common.Extensions;
+using HotelListing.Api.Common.Models.Filtering;
 using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Common.Results;
 using HotelListing.Api.Domain;
@@ -12,8 +13,11 @@ namespace HotelListing.Api.Application.Services
 {
     public class HotelService(HotelListingDbContext context, UserManager<ApplicationUser> userManager) : IHotelService
     {
-        public async Task<Result<PagedResult<GetHotelDto>>> GetHotelsAsync(PaginationParameters paginationParameters)
+        public async Task<Result<PagedResult<GetHotelDto>>> GetHotelsAsync(PaginationParameters paginationParameters,
+            HotelFilterParameters hotelFilterParameters)
         {
+
+
             var hotels = await context.Hotels.Select(h => new GetHotelDto(
                 h.Id,
                 h.Name,
