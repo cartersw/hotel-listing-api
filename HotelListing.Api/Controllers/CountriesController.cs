@@ -67,7 +67,7 @@ public class CountriesController(ICountryService countryService) : ApiController
         {
             return BadRequest("Patch document is required");
         }
-
+        
         var result = await countryService.PatchCountryAsync(countryId, patchDoc);
         return ToActionResult(result);
     }

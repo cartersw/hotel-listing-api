@@ -97,12 +97,18 @@ namespace HotelListing.Api.Tests
                 await context.Database.ExecuteSqlRawAsync(
                 "SET IDENTITY_INSERT Countries ON");
 
-                await context.Countries.AddAsync(
+                await context.Countries.AddRangeAsync(
                     new Country
                     {
                         CountryId = TestCountries.CountryOneId,
                         Name = TestCountries.CountryOneName,
                         ShortName = TestCountries.CountryOneShortName
+                    },
+                    new Country
+                    {
+                        CountryId = TestCountries.CountryTwoId,
+                        Name = TestCountries.CountryTwoName,
+                        ShortName = TestCountries.CountryTwoShortName
                     });
 
                 await context.SaveChangesAsync();
