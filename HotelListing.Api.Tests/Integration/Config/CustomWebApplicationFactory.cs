@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,18 +18,12 @@ namespace HotelListing.Api.Tests.Integration.Config
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+
+        
             builder.ConfigureServices((context, services) =>
             {
                 // change connection parameters to test db
-
-                var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<HotelListingDbContext>));
-
-                if (descriptor != null)
-                {
-                    services.Remove(descriptor);
-                }
-
-
+             
                 var connectionString = context.Configuration.GetConnectionString("HotelListingDbConnectionString") ??
                 throw new InvalidOperationException("Connection string 'HotelListingDbConnectionString' not found.");
 

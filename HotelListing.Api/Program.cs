@@ -19,10 +19,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("HotelListingDbConnectionString");
 
-builder.Services.AddDbContext<HotelListingDbContext>(options => 
-    options.UseSqlServer(connectionString,
-    sqlOptions =>
-        sqlOptions.MigrationsAssembly("HotelListing.Api.Domain")));
+
+if (!builder.Environment.IsEnvironment("Development"))
+{
+    builder.Services.AddDbContextPool<HotelListingDbContext>(options =>
+    options.UseSqlServer(
+        connectionString,
+        sqlOptions =>
+            sqlOptions.MigrationsAssembly("HotelListing.Api.Domain")), poolSize: 128);
+}
+
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
