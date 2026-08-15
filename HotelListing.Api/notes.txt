@@ -41,6 +41,8 @@ Query: ?pageNumber=1&pageSize=20 (at the end of endpoint url)
 Implement paging to limit the number of records returned per request
 Cursor based paging can help with large data sets 
 
+Dapper can be used instead of ef core for faster operations
+
 --TODO
 Implement DB Api key creation
 Implement DB Api key checking in apikeyvalidatorservice

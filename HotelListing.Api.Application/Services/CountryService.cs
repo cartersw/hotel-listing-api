@@ -30,7 +30,9 @@ namespace HotelListing.Api.Application.Services
                 query = query.Where(c => c.Name.Contains(filters.Search) || c.ShortName.Contains(filters.Search));
             }
 
-            var countries = await query.Select(c => new GetCountryDto(
+            var countries = await query
+                .AsNoTracking()
+                .Select(c => new GetCountryDto(
                 c.CountryId,
                 c.Name,
                 c.ShortName
@@ -42,19 +44,20 @@ namespace HotelListing.Api.Application.Services
         public async Task<Result<GetCountryDetailsDto>> GetCountryAsync(int countryId)
         {
             var country = await context.Countries
-            .Where(c => c.CountryId == countryId)
-            .Select(c => new GetCountryDetailsDto(
-            c.CountryId,
-            c.Name,
-            c.ShortName,
-            c.Hotels.Select(h => new GetHotelDto(
-                h.Id,
-                h.Name,
-                h.Address,
-                h.Rating,
-                h.Country!.Name
-                )).ToList()
-            )).FirstOrDefaultAsync();
+                .AsNoTracking()
+                .Where(c => c.CountryId == countryId)
+                .Select(c => new GetCountryDetailsDto(
+                c.CountryId,
+                c.Name,
+                c.ShortName,
+                c.Hotels.Select(h => new GetHotelDto(
+                    h.Id,
+                    h.Name,
+                    h.Address,
+                    h.Rating,
+                    h.Country!.Name
+                    )).ToList()
+                )).FirstOrDefaultAsync();
             
             return country != null ? Result<GetCountryDetailsDto>.Success(country) : Result<GetCountryDetailsDto>.NotFound();
         }
@@ -63,6 +66,7 @@ namespace HotelListing.Api.Application.Services
             PaginationParameters paginationParameters)
         {
             var hotels = await context.Hotels
+                .AsNoTracking()
                 .Where(h => h.CountryId == countryId)
                 .Select(h => new GetHotelDetailsDto(
                 h.Id,
@@ -196,12 +200,16 @@ namespace HotelListing.Api.Application.Services
 
         public async Task<bool> CountryExistsAsync(int? countryId)
         {
-            return await context.Countries.AnyAsync(e => e.CountryId == countryId);
+            return await context.Countries
+                .AsNoTracking()
+                .AnyAsync(e => e.CountryId == countryId);
         }
 
         public async Task<bool> CountryExistsAsync(string name)
         {
-            return await context.Countries.AnyAsync(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
+            return await context.Countries
+                .AsNoTracking()
+                .AnyAsync(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
         }
 
         
