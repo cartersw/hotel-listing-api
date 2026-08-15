@@ -12,10 +12,23 @@ namespace HotelListing.Api.Application.Services
 {
     public class CountryService(HotelListingDbContext context) : ICountryService
     {
-        public async Task<Result<IEnumerable<GetCountryDto>>> GetCountriesAsync(CountryFilterParameters countryFilterParameters)
+        public async Task<Result<IEnumerable<GetCountryDto>>> GetCountriesAsync(CountryFilterParameters filters)
         {
 
-            var countries = await context.Countries.Select(c => new GetCountryDto(
+            var query = context.Countries.AsQueryable();
+
+
+            if (filters.HasHotels!.Value)
+            {
+                query = query.Where(c => c.Hotels.Count >= 1);
+            }
+
+            if (!string.IsNullOrWhiteSpace(filters.Search))
+            {
+                query = query.Where(c => c.Name.Contains(filters.Search));
+            }
+
+            var countries = await query.Select(c => new GetCountryDto(
                 c.CountryId,
                 c.Name,
                 c.ShortName
