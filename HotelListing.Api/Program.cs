@@ -83,7 +83,9 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 
 builder.Services.AddScoped<IApiKeyValidatorService, ApiKeyValidatorService>();
 
-builder.Services.AddControllers().AddJsonOptions(opt =>
+builder.Services.AddControllers()
+    .AddNewtonsoftJson()
+    .AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
