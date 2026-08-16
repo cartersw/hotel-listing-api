@@ -21,7 +21,7 @@ public class CountriesController(ICountryService countryService) : ApiController
     // GET: api/Country
     [HttpGet]
     
-    public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountry(CountryFilterParameters countryFilterParameters)
+    public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountry([FromQuery] CountryFilterParameters countryFilterParameters)
     {
         var result = await countryService.GetCountriesAsync(countryFilterParameters);
 
