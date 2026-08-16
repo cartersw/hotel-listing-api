@@ -1,51 +1,60 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using HotelListing.Api.Handler;
+using HotelListing.Api.Application.Contracts;
+using HotelListing.Api.Application.Services;
+using HotelListing.Api.Authorization.Handlers;
+using HotelListing.Api.Authorization.Requirements;
 using HotelListing.Api.Common.Constants;
+using HotelListing.Api.Common.Models.Config;
+using HotelListing.Api.Domain;
+using HotelListing.Api.Handler;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using HotelListing.Api.Authorization.Handlers;
-using Microsoft.AspNetCore.Authorization;
-using HotelListing.Api.Authorization.Requirements;
-using HotelListing.Api.Domain;
-using HotelListing.Api.Application.Services;
-using HotelListing.Api.Application.Contracts;
-using HotelListing.Api.Common.Models.Config;
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("HotelListingDbConnectionString");
 
+var connectionBuilder = new SqlConnectionStringBuilder(connectionString);
 
-if (!builder.Environment.IsEnvironment("Testing"))
+if (builder.Environment.IsEnvironment("Testing"))
 {
-    builder.Services.AddDbContextPool<HotelListingDbContext>(options =>
+    connectionBuilder.InitialCatalog = "HotelListingTestDb";
+}
+
+
+builder.Services.AddDbContextPool<HotelListingDbContext>(options =>
+{
+    options.UseSqlServer(connectionBuilder.ConnectionString, sqlOptions =>
     {
-        options.UseSqlServer(connectionString, sqlOptions =>
-        {
-            sqlOptions.MigrationsAssembly("HotelListing.Api.Domain");
-            sqlOptions.CommandTimeout(30);
-            sqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 3,
-                maxRetryDelay: TimeSpan.FromSeconds(5),
-                errorNumbersToAdd: null
-                );
-        });
-        if (builder.Environment.IsDevelopment())
-        {
-            options.EnableSensitiveDataLogging();
-            options.EnableDetailedErrors();
-        }
+        sqlOptions.MigrationsAssembly("HotelListing.Api.Domain");
+        sqlOptions.CommandTimeout(30);
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorNumbersToAdd: null
+            );
+    });
+    if (builder.Environment.IsDevelopment())
+    {
+        options.EnableSensitiveDataLogging();
+        options.EnableDetailedErrors();
+    }
         
-    }, poolSize: 128);
-}
-else
-{
-    builder.Configuration.AddUserSecrets<Program>();
-}
+}, poolSize: 128);
+
+
+
 
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));

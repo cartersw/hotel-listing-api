@@ -21,26 +21,6 @@ namespace HotelListing.Api.Tests.Integration.Config
             builder.UseEnvironment("Testing");
 
 
-            builder.ConfigureServices((context, services) =>
-            {
-                // change connection parameters to test db
-             
-                var connectionString = context.Configuration.GetConnectionString("HotelListingDbConnectionString") ??
-                throw new InvalidOperationException("Connection string 'HotelListingDbConnectionString' not found.");
-
-                var connectionBuilder = new SqlConnectionStringBuilder(connectionString)
-                {
-                    InitialCatalog = "HotelListingTestDb"
-                };
-
-                services.AddDbContext<HotelListingDbContext>(options =>
-                {
-                    options.UseSqlServer(
-                        connectionBuilder.ConnectionString);
-                });
-
-
-            });
         }
 
         public async Task InitializeAsync()
