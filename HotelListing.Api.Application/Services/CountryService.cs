@@ -3,6 +3,7 @@ using HotelListing.Api.Application.DTOs.Country;
 using HotelListing.Api.Application.DTOs.Hotel;
 using HotelListing.Api.Common.Constants;
 using HotelListing.Api.Common.Extensions;
+using HotelListing.Api.Common.Models.Cache;
 using HotelListing.Api.Common.Models.Filtering;
 using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Common.Results;
@@ -42,7 +43,7 @@ namespace HotelListing.Api.Application.Services
                 cacheSearchQuery += filters.Search.Trim().ToLowerInvariant();
             }
 
-            var cacheKey = "countries_list_" + cacheSearchQuery;
+            var cacheKey = CacheKeyNames.GetCountriesAsyncKey + cacheSearchQuery;
 
             if(!cache.TryGetValue(cacheKey, out IEnumerable<GetCountryDto>? countries))
             {
@@ -67,7 +68,7 @@ namespace HotelListing.Api.Application.Services
 
         public async Task<Result<GetCountryDetailsDto>> GetCountryAsync(int countryId)
         {
-            var cacheKey = "country_" + countryId;
+            var cacheKey = CacheKeyNames.GetCountryAsyncKey + countryId;
 
             if(!cache.TryGetValue(cacheKey, out GetCountryDetailsDto? country))
             {
