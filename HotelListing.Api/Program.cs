@@ -1,3 +1,4 @@
+using HotelListing.Api.Application.Caching;
 using HotelListing.Api.Application.Contracts;
 using HotelListing.Api.Application.Services;
 using HotelListing.Api.Authorization.Handlers;
@@ -115,6 +116,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 
 builder.Services.AddScoped<IApiKeyValidatorService, ApiKeyValidatorService>();
+
+builder.Services.AddSingleton<MemoryCacheService>();
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson()

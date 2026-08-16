@@ -1,4 +1,5 @@
-﻿using HotelListing.Api.Application.Contracts;
+﻿using HotelListing.Api.Application.Caching;
+using HotelListing.Api.Application.Contracts;
 using HotelListing.Api.Application.DTOs.Country;
 using HotelListing.Api.Application.DTOs.Hotel;
 using HotelListing.Api.Common.Constants;
@@ -14,7 +15,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics.Metrics;
 namespace HotelListing.Api.Application.Services
 {
-    public class CountryService(HotelListingDbContext context, IMemoryCache cache) : ICountryService
+    public class CountryService(HotelListingDbContext context, MemoryCacheService cache) : ICountryService
     {
         public async Task<Result<IEnumerable<GetCountryDto>>> GetCountriesAsync(CountryFilterParameters filters)
         {
@@ -55,11 +56,11 @@ namespace HotelListing.Api.Application.Services
                     c.ShortName
                     )).ToListAsync();
 
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(15));
 
-                cache.Set(cacheKey, countries, cacheOptions);
+                cache.Set(cacheKey,
+                    countries, 
+                    TimeSpan.FromMinutes(10),
+                    CacheGroupNames.Country);
             }
 
             countries ??= [];
@@ -88,14 +89,10 @@ namespace HotelListing.Api.Application.Services
                         )).ToList()
                     )).FirstOrDefaultAsync();
 
-                if(country != null)
-                {
-                    var cacheOptions = new MemoryCacheEntryOptions()
-                        .SetSlidingExpiration(TimeSpan.FromMinutes(5))
-                        .SetAbsoluteExpiration(TimeSpan.FromHours(1));
-
-                    cache.Set(cacheKey, country, cacheOptions);
-                }
+                cache.Set(cacheKey,
+                    country,
+                    TimeSpan.FromMinutes(10),
+                    CacheGroupNames.Country);
             }
             
             return country != null ? Result<GetCountryDetailsDto>.Success(country) : Result<GetCountryDetailsDto>.NotFound();
@@ -154,6 +151,8 @@ namespace HotelListing.Api.Application.Services
                 }
             }
 
+            cache.Invalidate(CacheGroupNames.Country);
+
             return Result.Success();
         }
 
@@ -180,6 +179,8 @@ namespace HotelListing.Api.Application.Services
                 country.ShortName
             );
 
+            cache.Invalidate(CacheGroupNames.Country);
+
             return Result<GetCountryDto>.Success(createdCountryDto); 
         }
 
@@ -194,6 +195,9 @@ namespace HotelListing.Api.Application.Services
 
             context.Countries.Remove(country);
             await context.SaveChangesAsync();
+
+            cache.Invalidate(CacheGroupNames.Country);
+
             return Result.Success();
         }
 
@@ -232,6 +236,8 @@ namespace HotelListing.Api.Application.Services
             country.ShortName = countryDto.ShortName;
 
             await context.SaveChangesAsync();
+
+            cache.Invalidate(CacheGroupNames.Country);
 
             return Result.Success();
         }
