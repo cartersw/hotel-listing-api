@@ -125,6 +125,8 @@ builder.Services.AddControllers()
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 app.MapGroup("api/defaultauth").MapIdentityApi<ApplicationUser>();

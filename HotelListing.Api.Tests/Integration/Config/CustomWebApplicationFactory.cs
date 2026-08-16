@@ -19,8 +19,6 @@ namespace HotelListing.Api.Tests.Integration.Config
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.UseEnvironment("Testing");
-
-
         }
 
         public async Task InitializeAsync()

@@ -9,55 +9,93 @@ using HotelListing.Api.Common.Results;
 using HotelListing.Api.Domain;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics.Metrics;
 namespace HotelListing.Api.Application.Services
 {
-    public class CountryService(HotelListingDbContext context) : ICountryService
+    public class CountryService(HotelListingDbContext context, IMemoryCache cache) : ICountryService
     {
         public async Task<Result<IEnumerable<GetCountryDto>>> GetCountriesAsync(CountryFilterParameters filters)
         {
+            var cacheSearchQuery = string.Empty;
 
             var query = context.Countries.AsQueryable();
 
 
-            if (filters.HasHotels!.Value)
+            if (filters.HasHotels.HasValue)
             {
-                query = query.Where(c => c.Hotels.Count >= 1);
+                if (filters.HasHotels.Value)
+                {
+                    query = query.Where(c => c.Hotels.Count >= 1);
+                }
+                else
+                {
+                    query = query.Where(c => c.Hotels.Count == 0);
+                }
+
+                cacheSearchQuery += filters.HasHotels.Value.ToString();
             }
 
             if (!string.IsNullOrWhiteSpace(filters.Search))
             {
                 query = query.Where(c => c.Name.Contains(filters.Search) || c.ShortName.Contains(filters.Search));
+                cacheSearchQuery += filters.Search.Trim().ToLowerInvariant();
             }
 
-            var countries = await query
-                .AsNoTracking()
-                .Select(c => new GetCountryDto(
-                c.CountryId,
-                c.Name,
-                c.ShortName
-            )).ToListAsync();
+            var cacheKey = "countries_list_" + cacheSearchQuery;
 
+            if(!cache.TryGetValue(cacheKey, out IEnumerable<GetCountryDto>? countries))
+            {
+                countries = await query
+                    .AsNoTracking()
+                    .Select(c => new GetCountryDto(
+                    c.CountryId,
+                    c.Name,
+                    c.ShortName
+                    )).ToListAsync();
+
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(15));
+
+                cache.Set(cacheKey, countries, cacheOptions);
+            }
+
+            countries ??= [];
             return Result<IEnumerable<GetCountryDto>>.Success(countries);
         }
 
         public async Task<Result<GetCountryDetailsDto>> GetCountryAsync(int countryId)
         {
-            var country = await context.Countries
-                .AsNoTracking()
-                .Where(c => c.CountryId == countryId)
-                .Select(c => new GetCountryDetailsDto(
-                c.CountryId,
-                c.Name,
-                c.ShortName,
-                c.Hotels.Select(h => new GetHotelDto(
-                    h.Id,
-                    h.Name,
-                    h.Address,
-                    h.Rating,
-                    h.Country!.Name
-                    )).ToList()
-                )).FirstOrDefaultAsync();
+            var cacheKey = "country_" + countryId;
+
+            if(!cache.TryGetValue(cacheKey, out GetCountryDetailsDto? country))
+            {
+                country = await context.Countries
+                    .AsNoTracking()
+                    .Where(c => c.CountryId == countryId)
+                    .Select(c => new GetCountryDetailsDto(
+                    c.CountryId,
+                    c.Name,
+                    c.ShortName,
+                    c.Hotels.Select(h => new GetHotelDto(
+                        h.Id,
+                        h.Name,
+                        h.Address,
+                        h.Rating,
+                        h.Country!.Name
+                        )).ToList()
+                    )).FirstOrDefaultAsync();
+
+                if(country != null)
+                {
+                    var cacheOptions = new MemoryCacheEntryOptions()
+                        .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                        .SetAbsoluteExpiration(TimeSpan.FromHours(1));
+
+                    cache.Set(cacheKey, country, cacheOptions);
+                }
+            }
             
             return country != null ? Result<GetCountryDetailsDto>.Success(country) : Result<GetCountryDetailsDto>.NotFound();
         }
