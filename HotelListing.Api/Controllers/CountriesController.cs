@@ -10,10 +10,12 @@ using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Application.DTOs.Hotel;
 using HotelListing.Api.Common.Models.Filtering;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.RateLimiting;
 
 
 [Route("api/[controller]")]
 [ApiController]
+[EnableRateLimiting("fixed")]
 [Authorize]
 public class CountriesController(ICountryService countryService) : ApiControllerBase
 {
