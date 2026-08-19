@@ -82,6 +82,7 @@ try
 
     if (string.IsNullOrWhiteSpace(jwtSettings.Key))
     {
+        Log.Fatal("JwtSettings:Key is not configured");
         throw new InvalidOperationException("JwtSettings:Key is not configured");
     }
 
@@ -226,14 +227,20 @@ try
 
     app.MapControllers();
 
+    Log.Information("HotelListing API started successfully");
+
     app.Run();
 
 
 }
 catch (Exception e)
 {
-
+    Log.Fatal(e, "Application terminated unexpectedly");
     throw;
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
 public partial class Program { }
