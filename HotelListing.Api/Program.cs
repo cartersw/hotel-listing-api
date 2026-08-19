@@ -36,6 +36,12 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.Host.UseSerilog((context, services, configuration) => configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+    );
+
     if (builder.Environment.IsEnvironment("Testing"))
     {
         builder.Configuration.AddUserSecrets<Program>();

@@ -46,6 +46,8 @@ Dapper can be used instead of ef core for faster operations
 MemoryCache = cache data used in application, more flexibility
 OutputCache = cache actual endpoint response only
 
+Action<T> expects a function that takes a type T
+
 --TODO
 Implement DB Api key creation
 Implement DB Api key checking in apikeyvalidatorservice
