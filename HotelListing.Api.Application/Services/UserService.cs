@@ -11,13 +11,15 @@ using HotelListing.Api.Application.DTOs.Auth;
 using HotelListing.Api.Application.Contracts;
 using Microsoft.AspNetCore.Http;
 using HotelListing.Api.Common.Models.Config;
+using Microsoft.Extensions.Logging;
 
 namespace HotelListing.Api.Application.Services
 {
     public class UserService(UserManager<ApplicationUser> userManager, 
         RoleManager<IdentityRole> roleManager, 
         IOptions<JwtSettings> jwtOptions,
-        IHttpContextAccessor httpContextAccessor) : IUserService
+        IHttpContextAccessor httpContextAccessor,
+        ILogger<UserService> logger) : IUserService
     {
 
         public string UserId => httpContextAccessor?
@@ -42,6 +44,10 @@ namespace HotelListing.Api.Application.Services
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => new Error(ErrorCodes.BadRequest, e.Description)).ToArray();
+
+                logger.LogError("User registration failed for {Email}: {Errors}",
+                    registerUserDto.Email, string.Join(", ", errors));
+
                 return Result<RegisteredUserDto>.BadRequest(errors);
             }
 
@@ -65,6 +71,7 @@ namespace HotelListing.Api.Application.Services
 
             if (user == null)
             {
+                logger.LogWarning("Failed login attempt for email: {Email}", loginUserDto.Email);
                 return Result<LoggedInUserDto>.Unauthorized(new Error(ErrorCodes.Unauthorized, "Invalid credentials"));
 
             }
