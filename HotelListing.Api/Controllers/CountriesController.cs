@@ -59,9 +59,8 @@ public class CountriesController(ICountryService countryService) : ApiController
     [Authorize(Roles = RoleNames.Administrator)]
     public async Task<ActionResult> PutCountry(int countryId, UpdateCountryDto updateDto)
     { 
-
-
         var result = await countryService.UpdateCountryAsync(countryId, updateDto);
+
 
         return ToActionResult(result);
     }

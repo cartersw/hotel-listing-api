@@ -213,7 +213,15 @@ try
 
     builder.Services.AddMemoryCache();
 
-    builder.Services.AddOutputCache();
+    builder.Services.AddOutputCache(options =>
+    {
+        options.AddPolicy("Countries", policy =>
+        {
+            policy.Cache()
+                .Expire(TimeSpan.FromMinutes(5))
+                .Tag("countries");
+        });
+    });
 
     var app = builder.Build();
 

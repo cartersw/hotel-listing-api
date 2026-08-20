@@ -10,12 +10,13 @@ using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Common.Results;
 using HotelListing.Api.Domain;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics.Metrics;
 namespace HotelListing.Api.Application.Services
 {
-    public class CountryService(HotelListingDbContext context, MemoryCacheService cache) : ICountryService
+    public class CountryService(HotelListingDbContext context, MemoryCacheService cache, IOutputCacheStore outputCacheStore) : ICountryService
     {
         public async Task<Result<IEnumerable<GetCountryDto>>> GetCountriesAsync(CountryFilterParameters filters)
         {
@@ -152,7 +153,8 @@ namespace HotelListing.Api.Application.Services
             }
 
             cache.Invalidate(CacheGroupNames.Country);
-
+            //using cancellation token none for now to test implementation, but in future just have controllers receive cancellation tokens 
+            await outputCacheStore.EvictByTagAsync(CacheGroupNames.Country, CancellationToken.None);
             return Result.Success();
         }
 
@@ -180,7 +182,7 @@ namespace HotelListing.Api.Application.Services
             );
 
             cache.Invalidate(CacheGroupNames.Country);
-
+            await outputCacheStore.EvictByTagAsync(CacheGroupNames.Country, CancellationToken.None);
             return Result<GetCountryDto>.Success(createdCountryDto); 
         }
 
@@ -197,7 +199,7 @@ namespace HotelListing.Api.Application.Services
             await context.SaveChangesAsync();
 
             cache.Invalidate(CacheGroupNames.Country);
-
+            await outputCacheStore.EvictByTagAsync(CacheGroupNames.Country, CancellationToken.None);
             return Result.Success();
         }
 
@@ -238,6 +240,7 @@ namespace HotelListing.Api.Application.Services
             await context.SaveChangesAsync();
 
             cache.Invalidate(CacheGroupNames.Country);
+            await outputCacheStore.EvictByTagAsync(CacheGroupNames.Country, CancellationToken.None);
 
             return Result.Success();
         }
