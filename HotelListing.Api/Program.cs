@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.RateLimiting;
 
@@ -211,6 +212,24 @@ try
     });
 
     builder.Services.AddMemoryCache();
+
+    builder.Services.AddOutputCache(options =>
+    {
+        options.AddPolicy("Authenticated", policy =>
+        {
+            policy.Cache()
+                .Expire(TimeSpan.FromMinutes(5))
+                .VaryByValue(context =>
+                {
+                    var userId = context.User.FindFirst(
+                        ClaimTypes.NameIdentifier)?.Value ?? "";
+
+                    return new KeyValuePair<string, string>(
+                        "userId",
+                        userId);
+                });
+        }, excludeDefaultPolicy : true);
+    });
 
     var app = builder.Build();
 
