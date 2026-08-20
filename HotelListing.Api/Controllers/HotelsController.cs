@@ -1,12 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using HotelListing.Api.Application.Contracts;
+using HotelListing.Api.Application.DTOs.Hotel;
+using HotelListing.Api.Common.Constants;
+using HotelListing.Api.Common.Models.Filtering;
+using HotelListing.Api.Common.Models.Paging;
 using HotelListing.Api.Controllers;
 using Microsoft.AspNetCore.Authorization;
-using HotelListing.Api.Common.Constants;
-using HotelListing.Api.Application.DTOs.Hotel;
-using HotelListing.Api.Application.Contracts;
-using HotelListing.Api.Common.Models.Paging;
-using HotelListing.Api.Common.Models.Filtering;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.EntityFrameworkCore;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -21,6 +22,7 @@ public class HotelsController : ApiControllerBase
 
     // GET: api/Hotel
     [HttpGet]
+    
     public async Task<ActionResult<PagedResult<GetHotelDto>>> GetHotels([FromQuery] PaginationParameters paginationParameters,
         [FromQuery] HotelFilterParameters hotelFilterParameters)
     {

@@ -213,23 +213,7 @@ try
 
     builder.Services.AddMemoryCache();
 
-    builder.Services.AddOutputCache(options =>
-    {
-        options.AddPolicy("Authenticated", policy =>
-        {
-            policy.Cache()
-                .Expire(TimeSpan.FromMinutes(5))
-                .VaryByValue(context =>
-                {
-                    var userId = context.User.FindFirst(
-                        ClaimTypes.NameIdentifier)?.Value ?? "";
-
-                    return new KeyValuePair<string, string>(
-                        "userId",
-                        userId);
-                });
-        }, excludeDefaultPolicy : true);
-    });
+    builder.Services.AddOutputCache();
 
     var app = builder.Build();
 
@@ -248,6 +232,8 @@ try
     app.UseAuthentication();
 
     app.UseAuthorization();
+
+    app.UseOutputCache();
 
     app.MapControllers();
 

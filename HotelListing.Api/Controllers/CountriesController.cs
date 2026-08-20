@@ -11,18 +11,19 @@ using HotelListing.Api.Application.DTOs.Hotel;
 using HotelListing.Api.Common.Models.Filtering;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.OutputCaching;
 
 
 [Route("api/[controller]")]
 [ApiController]
 [EnableRateLimiting("fixed")]
-[Authorize]
+
 public class CountriesController(ICountryService countryService) : ApiControllerBase
 {
 
     // GET: api/Country
     [HttpGet]
-    
+    [OutputCache]
     public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountry([FromQuery] CountryFilterParameters countryFilterParameters)
     {
         var result = await countryService.GetCountriesAsync(countryFilterParameters);
@@ -31,7 +32,9 @@ public class CountriesController(ICountryService countryService) : ApiController
     }
 
     // GET: api/Country/5
+    
     [HttpGet("{countryid}")]
+    [OutputCache]
     public async Task<ActionResult<GetCountryDetailsDto>> GetCountry(int countryId)
     {
         var result = await countryService.GetCountryAsync(countryId);
@@ -39,7 +42,9 @@ public class CountriesController(ICountryService countryService) : ApiController
         return ToActionResult(result);
     }
 
+    
     [HttpGet("{countryid}/hotels")]
+    [Authorize]
     public async Task<ActionResult<PagedResult<GetHotelDetailsDto>>> GetCountryHotels(int countryId, 
         [FromQuery] PaginationParameters paginationParameters)
     {
