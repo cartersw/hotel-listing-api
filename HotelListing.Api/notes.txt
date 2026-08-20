@@ -48,6 +48,8 @@ OutputCache = cache actual endpoint response only
 
 Action<T> expects a function that takes a type T
 
+https://localhost:7041/healthchecks-ui#/healthchecks
+
 --TODO
 Implement DB Api key creation
 Implement DB Api key checking in apikeyvalidatorservice
