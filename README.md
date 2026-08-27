@@ -35,19 +35,20 @@ A hotel management API built with ASP.NET Core and SQL Server.
 - SQL Server
 
 #### Clone the repository:
-
+```bash
 git clone <repository-url>
 cd <repository-folder>
-
+```
 #### Setup .Net Environment
-
+```bash
 dotnet restore
 dotnet user-secrets init
 
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<your-connection-string>"
-
+```
 #### Migrations
-
+```bash
 dotnet ef migrations add [migration name] --project HotelListing.Api.Domain --startup-project HotelListing.Api 
 dotnet ef database update --project HotelListing.Api.Domain --startup-project HotelListing.Api
+```
 
