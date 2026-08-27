@@ -39,7 +39,7 @@ A hotel management API built with ASP.NET Core and SQL Server.
 git clone <repository-url>
 cd <repository-folder>
 ```
-#### Setup .Net Environment
+#### Restore Dependencies and Configure Secrets
 ```bash
 dotnet restore
 dotnet user-secrets init
