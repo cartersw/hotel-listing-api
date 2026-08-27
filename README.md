@@ -6,12 +6,8 @@ A hotel management API built with ASP.NET Core and SQL Server.
 ## Features
 - JWT authentication
 - Role-based authorization
-- Hotel-specific administrator permissions
-- Country and hotel management
-- Booking management
 - In-memory caching with cache invalidation
 - API rate limiting
-- SQL Server persistence with Entity Framework Core
 - Integration testing with xUnit and WebApplicationFactory
 - Health checks
 - Structured logging
